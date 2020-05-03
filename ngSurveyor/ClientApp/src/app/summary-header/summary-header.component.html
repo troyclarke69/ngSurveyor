@@ -1,0 +1,46 @@
+<div class="section-container">
+  <h2>
+    Survey Archives
+  </h2>
+
+  <table class="table table-inverse
+      table-hover header-fixed">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Purpose</th>
+        <th>Opened</th>
+        <th>Closed</th>
+        <th>Status</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of stats">
+
+        <td>
+          <!--<img src="{{ s.countryInfo.flag }}" width="15%" height="15%">--> &nbsp;
+          <a routerLink="/summary-detail/{{ s.Id }}">
+            {{ s.Name }}
+          </a>
+        </td>
+        <td>{{ s.Purpose }}</td>
+        <td>{{ s.DateOpen }}</td>
+        <td>{{ s.DateClose }}</td>
+        <td>{{ s.Active }}</td>
+
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- <app-pagination
+  (goPage)="goToPage($event)"
+  (goPrev)="goToPrevious()"
+  (goNext)="goToNext()"
+  [page]="page"
+  [perPage]="limit"
+  [count]="total">
+  </app-pagination> -->
+
+</div>

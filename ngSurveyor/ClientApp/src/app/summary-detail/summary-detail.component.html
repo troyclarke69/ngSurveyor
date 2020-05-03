@@ -1,0 +1,39 @@
+<div class="section-container">
+  <h2>
+    Survey Results
+  </h2>
+
+  <table class="table table-inverse table-hover header-fixed">
+    <thead class="thead-dark">
+      <tr>
+        <th>Question</th>
+        <th>Answer</th>
+        <th>Votes</th>
+        <th>%</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of stats">
+
+        <td>{{ s.QuestionId }}</td>
+        <td>{{ s.AnswerOptionId }}</td>
+        <td>{{ s.Votes }}</td>
+        <td>{{ s.Perc }}</td>
+
+      </tr>
+
+    </tbody>
+  </table>
+
+  <!-- <app-pagination
+  (goPage)="goToPage($event)"
+  (goPrev)="goToPrevious()"
+  (goNext)="goToNext()"
+  [page]="page"
+  [perPage]="limit"
+  [count]="total">
+  </app-pagination> -->
+
+</div>
+
