@@ -1,5 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
+* {
+  font-family: "Gotu", sans-serif;
+}
+
+#page-label {
+  padding-right: 10px;
+}
 /* Provide sufficient contrast against white background */
 a {
   color: #0366d6;

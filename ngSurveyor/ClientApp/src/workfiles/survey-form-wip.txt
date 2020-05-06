@@ -1,0 +1,41 @@
+<h4>Survey: {{survey}}</h4>
+<h4>Session: {{session1}}</h4>
+<!--<option value="default">~~ select ~~</option>-->
+<form #userForm="ngForm">
+
+  {{ userForm.value | json}}
+
+  <table class="table table-striped">
+
+    <tr *ngFor="let row of jelly">
+      <td>
+        <input type="hidden" name={{row.QuestionId}} ngModel>{{row.QuestionText}}
+      </td>
+    <!--</tr>
+    <tr>-->
+      <td>
+        <select name={{row.QuestionId}} ngModel>
+          <option *ngFor="let a of row" value={{a.AnswerVal}}>
+            {{a.AnswerText}}
+          </option>
+        </select>
+      </td>
+
+    </tr>
+
+
+    <!--<tr *ngFor="let row of stats">
+      <td>
+        <input type="hidden" name={{row.QuestionId}} ngModel>{{row.QuestionText}}
+      </td>
+
+      <td>
+        <select class="custom-select" name={{row.AnswerVal}} ngModel>
+          <option>{{row.AnswerText}}</option>
+        </select>
+      </td>
+
+    </tr>-->
+  </table>
+
+</form>

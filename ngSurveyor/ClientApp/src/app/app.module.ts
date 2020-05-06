@@ -11,6 +11,7 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { SummaryHeaderComponent } from './summary-header/summary-header.component';
 import { SummaryDetailComponent } from './summary-detail/summary-detail.component';
+import { SurveyFormComponent } from './survey-form/survey-form.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { SummaryDetailComponent } from './summary-detail/summary-detail.componen
     CounterComponent,
     FetchDataComponent,
     SummaryHeaderComponent,
-    SummaryDetailComponent
+    SummaryDetailComponent,
+    SurveyFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -32,6 +34,7 @@ import { SummaryDetailComponent } from './summary-detail/summary-detail.componen
       { path: 'fetch-data', component: FetchDataComponent },
         { path: 'summary-header', component: SummaryHeaderComponent },
         { path: 'summary-detail/:survey', component: SummaryDetailComponent },
+        { path: 'survey-form/:session/:qgroup', component: SurveyFormComponent },
     ])
   ],
   providers: [],

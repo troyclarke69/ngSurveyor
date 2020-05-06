@@ -24,11 +24,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\app\services\summary-detail-api.ts" />
-    <None Remove="ClientApp\src\app\services\summary-header-api.ts" />
+    <Compile Remove="ClientApp\src\app\services\survey-form-api.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\services\summary-detail-api.ts" />
+    <None Remove="ClientApp\src\app\services\summary-header-api.ts" />
+    <None Remove="ClientApp\src\app\services\survey-form-api.cs" />
+    <None Remove="ClientApp\src\app\services\survey-form-api.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\services\survey-form-api.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\summary-detail-api.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\summary-header-api.ts" />
   </ItemGroup>

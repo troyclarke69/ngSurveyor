@@ -1,0 +1,34 @@
+
+
+<!--<option value="default">~~ select ~~</option>-->
+  <form #userForm="ngForm">
+
+    <div>{{ userForm.value | json}}</div>
+
+    <!--<img src="/images/survey1.png" width="20%"/>-->
+
+    <div>
+      <span class="badge badge-primary">Id: </span> <em> {{stats.surveyid}}  </em>
+      <span class="badge badge-primary"> Survey Name: </span> <em> {{stats.name}}  </em>
+      <span class="badge badge-primary"> Session: </span> <em> {{stats.sessionid}}</em>
+    </div>
+    <p>
+    </p>
+
+    <table class="table table-striped">
+
+      <tr *ngFor="let row of stats.data">
+        <td>
+          <label>{{row.text}}</label>
+        </td>
+        <td>
+          <select name={{row.id}} ngModel ng-style="'width':'100px'">
+            <option *ngFor="let a of row.options.option" value={{a.id}}>
+              {{a.text}}
+            </option>
+          </select>
+        </td>
+      </tr>
+    </table>
+
+  </form>

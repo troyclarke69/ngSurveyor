@@ -11,11 +11,11 @@ import { Location } from '@angular/common'
 export class SummaryDetailComponent implements OnInit {
 
     stats = [];
-    private survey;
+    public survey;
 
     constructor(private apiService: ApiService,
-                private route: ActivatedRoute,
-                private location: Location) { }
+                  private route: ActivatedRoute,
+                    private location: Location) { }
 
     ngOnInit() {
 

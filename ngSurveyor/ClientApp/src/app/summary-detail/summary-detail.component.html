@@ -1,13 +1,13 @@
 <div class="section-container">
-  <h2>
-    Survey Results
-  </h2>
+  <h4>
+    <span id="page-label" class="badge badge-primary">Survey Results</span> <em>{{ survey }}</em>
+  </h4>
 
   <table class="table table-inverse table-hover header-fixed">
     <thead class="thead-dark">
       <tr>
         <th>Question</th>
-        <th>Answer</th>
+        <th>Choice</th>
         <th>Votes</th>
         <th>%</th>
 
@@ -16,8 +16,8 @@
     <tbody>
       <tr *ngFor="let s of stats">
 
-        <td>{{ s.QuestionId }}</td>
-        <td>{{ s.AnswerOptionId }}</td>
+        <td>{{ s.QuestionText }}</td>
+        <td>{{ s.AnswerText }}</td>
         <td>{{ s.Votes }}</td>
         <td>{{ s.Perc }}</td>
 
