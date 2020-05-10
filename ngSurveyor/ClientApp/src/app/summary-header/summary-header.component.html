@@ -1,6 +1,6 @@
 <div class="section-container">
   <h2>
-    Survey Archives
+    Surveys
   </h2>
 
   <table class="table table-inverse
@@ -10,8 +10,9 @@
         <th>Name</th>
         <th>Purpose</th>
         <th>Opened</th>
-        <th>Closed</th>
-        <th>Status</th>
+        <!--<th>Closed</th>
+        <th>Status</th>-->
+        <th colspan="2"></th>
 
       </tr>
     </thead>
@@ -19,15 +20,22 @@
       <tr *ngFor="let s of stats">
 
         <td>
-          <!--<img src="{{ s.countryInfo.flag }}" width="15%" height="15%">--> &nbsp;
-          <a routerLink="/summary-detail/{{ s.Id }}">
+          <!--<img src="{{ s.img }}" width="15%" height="15%">-->
+          {{s.Name}}
+          <!--<a routerLink="/summary-detail/{{ s.Id }} ngToolTip='View Stats'">
             {{ s.Name }}
-          </a>
+          </a>-->
+
         </td>
         <td>{{ s.Purpose }}</td>
-        <td>{{ s.DateOpen }}</td>
-        <td>{{ s.DateClose }}</td>
-        <td>{{ s.Active }}</td>
+        <td>{{ s.DateOpen | date:'MM/dd/yyyy'}}</td>
+
+        <!--<td *ngIf="s.Active!='Open'">{{ s.DateClose | date:'MM/dd/yyyy'}}</td>
+        <td *ngIf="s.Active=='Open'"></td>-->
+        <!--<td>{{ s.Active }}</td>-->
+
+        <td><a routerLink="/survey-form/{{ s.Id }}">Take Survey</a></td>
+        <td><a routerLink="/summary-detail/{{ s.Id }}/0">View Stats</a></td>
 
       </tr>
 

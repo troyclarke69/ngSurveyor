@@ -7,7 +7,10 @@ import { HttpClient } from '@angular/common/http';
 
 export class ApiService {
 
-    private SERVER_URL = "http://127.0.0.1:5000/pySurveyor/survey/entry?";
+    private SURVEY_GET_URL = "http://127.0.0.1:5000/pysurveyor/survey/entry?";
+    private RESULT_POST_URL = "http://127.0.0.1:5000/pysurveyor/result/post?";
+    private SESSION_POST_URL = "http://127.0.0.1:5000/pysurveyor/session/post?";
+
     private param: string;
 
     constructor(private httpClient: HttpClient) { }
@@ -15,10 +18,28 @@ export class ApiService {
     public fetchData(sessionId, qgroup) {
 
         this.param = "session=" + sessionId + "&qgroup=" + qgroup;
+        //console.log("ApiService: survey-form-api.fetchData(s,q)");
+        console.log(`${this.SURVEY_GET_URL}` + this.param);
 
-        console.log("APIService: survey-form-api.fetchData(s,q)");
-        console.log(`${this.SERVER_URL}` + this.param);
+        return this.httpClient.get(`${this.SURVEY_GET_URL}` + this.param);
+    }
 
-        return this.httpClient.get(`${this.SERVER_URL}` + this.param);
+    public postData(result, sessionId) {
+      
+        var result_json = JSON.stringify(result);
+        //console.log('result_json ', result_json);
+        this.param = "result=" + result_json + "&session=" + sessionId;
+        //console.log("ApiService: survey-form-api.postData(r,s)");
+        console.log(`${this.RESULT_POST_URL}` + this.param);
+
+        return this.httpClient.get(`${this.RESULT_POST_URL}` + this.param);
+    }
+
+    public postSession(guid, surveyId) {
+
+        this.param = "guid=" + guid + "&survey=" + surveyId;
+        console.log(`${this.SESSION_POST_URL}` + this.param);
+
+        return this.httpClient.get(`${this.SESSION_POST_URL}` + this.param);
     }
 }

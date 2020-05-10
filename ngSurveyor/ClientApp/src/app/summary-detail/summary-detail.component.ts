@@ -12,6 +12,7 @@ export class SummaryDetailComponent implements OnInit {
 
     stats = [];
     public survey;
+    public session;
 
     constructor(private apiService: ApiService,
                   private route: ActivatedRoute,
@@ -20,12 +21,15 @@ export class SummaryDetailComponent implements OnInit {
     ngOnInit() {
 
         this.route.paramMap.subscribe(params => {
-            this.survey = params.get("survey")
+            this.survey = params.get("survey"),
+            this.session = params.get("session")
         })
 
-        this.apiService.fetchData(this.survey)
+        this.apiService.fetchData(this.survey, this.session)
             .subscribe((data: any[]) => {
-              this.stats = data;
+                this.stats = data;
+
+                console.log(this.stats);
 
         })
     }

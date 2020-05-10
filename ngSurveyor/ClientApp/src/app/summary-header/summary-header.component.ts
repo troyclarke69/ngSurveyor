@@ -13,6 +13,8 @@ export class SummaryHeaderComponent implements OnInit {
     constructor(private apiService: ApiService) { }
 
     ngOnInit() {
+
+        // Insert Session record
         this.apiService.fetchData().subscribe((data: any[]) => {
             console.log(data);
             this.stats = data;

@@ -1,9 +1,43 @@
 <div class="section-container">
   <h4>
-    <span id="page-label" class="badge badge-primary">Survey Results</span> <em>{{ survey }}</em>
+    <span id="page-label" class="badge badge-primary">Survey Results</span> <em>&nbsp;&nbsp;{{stats.surveyname}}</em>
   </h4>
 
-  <table class="table table-inverse table-hover header-fixed">
+  <div>
+    <ul *ngFor="let row of stats.data">
+      <li *ngIf="row.text!=''">{{  row.text }} </li>
+      <li *ngIf="row.text==''">There are no Results available at the moment. </li>
+
+      <ul *ngFor="let opt of row.options.option">
+
+        <li *ngIf="opt.choice =='1'">
+          <b>{{ opt.text }}</b>
+
+          <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar"
+                 aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width: opt.percentage + '%'}">
+              <em>{{ opt.tally }}</em>
+            </div>
+          </div>
+        </li>
+
+        <li *ngIf="opt.choice !='1'">
+          {{ opt.text }}
+
+          <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar"
+                 aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width: opt.percentage + '%'}">
+              <em>{{ opt.tally }}</em>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+
+    </ul>
+
+  </div>
+  <!--<table class="table table-inverse table-hover header-fixed">
     <thead class="thead-dark">
       <tr>
         <th>Question</th>
@@ -14,17 +48,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let s of stats">
+      <tr *ngFor="let s of stats.data">
 
         <td>{{ s.QuestionText }}</td>
-        <td>{{ s.AnswerText }}</td>
-        <td>{{ s.Votes }}</td>
-        <td>{{ s.Perc }}</td>
-
+      </tr>
+      <tr *ngFor="let x of s.options.option">
+        <td></td>
+        <td>{{ x.AnswerText }}</td>
+        <td>{{ x.Votes }}</td>
+        <td>{{ x.Perc }}</td>
       </tr>
 
     </tbody>
-  </table>
+  </table>-->
 
   <!-- <app-pagination
   (goPage)="goToPage($event)"

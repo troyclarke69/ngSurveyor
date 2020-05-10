@@ -7,14 +7,16 @@ import { HttpClient } from '@angular/common/http';
 
 export class ApiService {
 
-    private SERVER_URL = "http://127.0.0.1:5000/pySurveyor/Survey?survey=";
+    private SERVER_URL = "http://127.0.0.1:5000/pysurveyor/survey?";
 
+    private param: string;
 
     constructor(private httpClient: HttpClient) { }
 
-    public fetchData(id) {
+    public fetchData(surveyId, sessionId) {
 
+        this.param = "survey=" + surveyId + "&session=" + sessionId;
         //console.log("coronaGlobalService:fetchData");
-        return this.httpClient.get(`${this.SERVER_URL}` + id);
+        return this.httpClient.get(`${this.SERVER_URL}` + this.param);
     }
 }
