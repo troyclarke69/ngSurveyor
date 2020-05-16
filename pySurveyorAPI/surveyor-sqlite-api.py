@@ -6,7 +6,7 @@ import requests
 import json
 # for MSSQL/PYODBC >
 import pyodbc
-import collections
+#import collections
 import datetime
 
 app = flask.Flask(__name__)
@@ -32,12 +32,8 @@ def result_post():
     row = row.replace('}', '')
     row = row.split(',')
 
-    conn = pyodbc.connect('Driver={SQL Server Native Client 11.0};'
-                        'Server=DESKTOP-GQKKU00;'
-                        'Database=Surveyor;'
-                        'Trusted_Connection=yes;')
-
-    query = '''INSERT INTO [dbo].[Result]([SessionId],[SurveyMasterId],[QuestionId],[AnswerOptionId]) 
+    conn = sqlite3.connect('data.sqlite')
+    query = '''INSERT INTO Result ([SessionId],[SurveyMasterId],[QuestionId],[AnswerOptionId]) 
                 VALUES(?,?,?,?)'''
     cursor = conn.cursor()
     
@@ -47,12 +43,18 @@ def result_post():
         question = x[0:pos]
         answer = x[pos+1:len(x)]
 
-        cursor.execute(query, session, survey, question, answer)
+        _params = []
+        _params.append(session)
+        _params.append(survey)
+        _params.append(question)
+        _params.append(answer)
+
+        cursor.execute(query, _params)
         records = records + 1
 
     # bulk insert
-    cursor.commit()
-    cursor.close()
+    conn.commit()
+    conn.close()
     return str(records)
 
 # ex. http://127.0.0.1:5000/pysurveyor/survey/entry?session=1&survey=1&qgroup=1
@@ -65,7 +67,6 @@ def survey_entry():
     survey = query_parameters.get('survey')
     qgroup = query_parameters.get('qgroup')
 
-    # prereq: TO/DO - must insert row in SESSION table for session/survey
     query = "SELECT s.Id SessionId, sm.Id SurveyId, sm.Name, q.Id QuestionId, q.QuestionText, q.[Order] FROM Session s inner join SurveyMaster sm on s.SurveyMasterId = sm.Id inner join SurveyQuestion sq on sm.Id = sq.SurveyMasterId inner join Question q on q.Id = sq.QuestionId WHERE"   
 
     to_filter = []
@@ -82,7 +83,7 @@ def survey_entry():
     query = query[:-4]
     query += " ORDER BY q.[Order];"
 
-    rows = get_data(query, to_filter)
+    rows = get_data_sl(query, to_filter)
 
     jsondata = {}
     jsondata['sessionid'] = session
@@ -91,24 +92,24 @@ def survey_entry():
     # FOR all questions for the survey ...
     questions=[] 
     for row in rows:
-        jsondata['surveyname'] = row.Name
+        jsondata['surveyname'] = row['Name']
 
         question={}      
-        question['id'] = row.QuestionId
-        question['text'] = row.QuestionText
+        question['id'] = row['QuestionId']
+        question['text'] = row['QuestionText']
         questions.append(question)
 
         # get all answer options per each questionId (above) - based on the Question.AnswerGroupId
-        query2 = "SELECT q.Id QuestionId, q.QuestionText, ao.Id AnswerOptionId, ao.AnswerText FROM Question q inner join AnswerOption ao on q.AnswerGroupId = ao.AnswerGroupId WHERE q.Id = " + str(row.QuestionId)
+        query2 = "SELECT q.Id QuestionId, q.QuestionText, ao.Id AnswerOptionId, ao.AnswerText FROM Question q inner join AnswerOption ao on q.AnswerGroupId = ao.AnswerGroupId WHERE q.Id = " + str(row['QuestionId'])
 
         to_filter.clear()
-        rows2 = get_data(query2, to_filter)
+        rows2 = get_data_sl(query2, to_filter)
 
         option=[]
         for row2 in rows2:
             opt={}           
-            opt['id'] = row2.AnswerOptionId
-            opt['text'] = row2.AnswerText
+            opt['id'] = row2['AnswerOptionId']
+            opt['text'] = row2['AnswerText']
             option.append(opt)
 
         options={}
@@ -122,28 +123,51 @@ def survey_entry():
 @app.route("/pysurveyor/summary", methods=["GET"])
 def summary_header():
     
-    query = 'SELECT Id, [Name], Purpose, DateOpen, DateClose, Active FROM [dbo].[SurveyMaster]'
+    query = "SELECT Id, [Name], Purpose, DateOpen, DateClose, Active FROM SurveyMaster WHERE Active = 1"
 
     to_filter = []
-    rows = get_data(query, to_filter)
+    rows = get_data_sl(query, to_filter)
 
     objects_list = []
+    
     for row in rows:
-        d = collections.OrderedDict()
-        d['Id'] = row.Id
-        d['Name'] = row.Name
-        d['Purpose'] = row.Purpose
-        d['DateOpen'] = str(row.DateOpen)
-        d['DateClose'] = str(row.DateClose)
-        if row.Active == 1:
+        d = {}
+        d['Id'] = row['Id']
+        d['Name'] = row['Name']
+        d['Purpose'] = row['Purpose']
+        d['DateOpen'] = str(row['DateOpen'])
+        d['DateClose'] = str(row['DateClose'])
+        if row['Active'] == 1:
             d['Active'] = "Open"
         else:
-            "Closed"
+            d['Active'] = "Closed"
        
         objects_list.append(d)
 
     response = json.dumps(objects_list)
     return response
+
+def dict_factory(cursor, row):
+    d = {}
+    for idx, col in enumerate(cursor.description):
+        d[col[0]] = row[idx]
+    return d
+
+def get_data_sl(q,f):
+
+    # print('get_data_sl -q', q)
+    # print('get_data_sl -f', f)
+    conn = sqlite3.connect('data.sqlite')
+    # conn.row_factory = dict_factory
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    cur.execute(q,f)
+    rows = cur.fetchall()
+    # print('get_data.sl -rows', rows)
+    conn.close()
+    
+    return rows
+    # return jsonify(rows)
 
 def get_data(q,f):
 
@@ -161,34 +185,38 @@ def get_data(q,f):
 # http://127.0.0.1:5000/pysurveyor/session/post?guid=0E984725-C51C-4BF4-9960-E1C80E27ABA0&survey=1
 @app.route("/pysurveyor/session/post", methods=["GET", "POST"])
 def session_post():
-    try:
-        query_parameters = request.args
-        guid = query_parameters.get('guid')
-        survey = query_parameters.get('survey')
-        dateEntered = datetime.datetime.now().date()
-        origin = '' # future use
+    
+    query_parameters = request.args
+    guid = query_parameters.get('guid')
+    survey = query_parameters.get('survey')
+    dateEntered = datetime.datetime.now().date()
+    origin = '' # future use
 
-        query = '''INSERT INTO [dbo].[Session]([Guid],[DateEntered],[Origin],[SurveyMasterId]) VALUES(?,?,?,?)'''
-        conn = pyodbc.connect('Driver={SQL Server Native Client 11.0};'
-                                'Server=DESKTOP-GQKKU00;'
-                                'Database=Surveyor;'
-                                'Trusted_Connection=yes;')
-        cursor = conn.cursor()
-        cursor.execute(query, guid, dateEntered, origin, survey)
-        cursor.commit()
-        conn.close()
+    query = '''INSERT INTO Session(Guid,DateEntered,Origin,SurveyMasterId) VALUES(?,?,?,?)'''
 
-        # return id for new insert
-        query_id = 'SELECT Id FROM [dbo].[Session] WHERE [Guid] = ?'
+    conn = sqlite3.connect('data.sqlite')
+    cur = conn.cursor()
 
-        to_filter = []
-        to_filter.append(guid)
+    _params = []
+    _params.append(guid)
+    _params.append(dateEntered)
+    _params.append(origin)
+    _params.append(survey)
 
-        row = get_data(query_id, to_filter)
-        for r in row:
-            new_id = r.Id
-    except:
-        print("An exception occurred")
+    cur.execute(query, _params)
+    conn.commit()
+    conn.close()
+
+    # return id for new insert
+    query_id = 'SELECT Id FROM Session WHERE Guid = ?'
+
+    _params.clear()
+    _params.append(guid)
+
+    row = get_data_sl(query_id, _params)
+    print(row)
+    for r in row:
+        new_id = r['Id']
 
     if new_id is None:
         return 'error'
@@ -227,7 +255,9 @@ def survey_detail():
     query += " ORDER BY q.[Order];"
 
     # print(query)
-    rows = get_data(query, to_filter)
+    rows = get_data_sl(query, to_filter)
+
+    # print('q1 ', rows)
 
     jsondata = {}
     jsondata['surveyid'] = survey
@@ -235,24 +265,24 @@ def survey_detail():
     # get all answer options for each quesiton of the survey ...
     questions=[] 
     for row in rows:
-        jsondata['surveyname'] = row.Name
+        jsondata['surveyname'] = row['Name']
 
         question={}      
-        question['id'] = row.QuestionId
-        question['text'] = row.QuestionText
+        question['id'] = row['QuestionId']
+        question['text'] = row['QuestionText']
 
         # now, get total vote tally per question
         query_total = '''
             SELECT r.SurveyMasterId, QuestionId, count(*) [Total]
                 FROM Result r inner join Question q on r.QuestionId = q.Id 
                 WHERE r.AnswerOptionId != 0 AND r.SurveyMasterId = ''' + str(survey)
-        query_total += ''' AND QuestionId = ''' + str(row.QuestionId)
+        query_total += ''' AND QuestionId = ''' + str(row['QuestionId'])
         query_total += ''' GROUP BY r.SurveyMasterId, QuestionId'''
         
         # print('query_total: ', query_total)
 
         to_filter.clear()
-        row_total = get_data(query_total, to_filter)
+        row_total = get_data_sl(query_total, to_filter)
 
         if len(row_total) == 0:
             question['total'] = 0
@@ -263,8 +293,8 @@ def survey_detail():
             _total = 0
         else:
             for tot in row_total:
-                question['total'] = tot.Total
-                _total = tot.Total
+                question['total'] = tot['Total']
+                _total = tot['Total']
 
         questions.append(question)
 
@@ -275,47 +305,47 @@ def survey_detail():
                 inner join SurveyQuestion sq on sm.Id = sq.SurveyMasterId
                 inner join Question q on q.Id = sq.QuestionId 
                 inner join AnswerGroup ag on q.AnswerGroupId = ag.Id
-                inner join AnswerOption ao on ag.Id = ao.AnswerGroupId WHERE q.Id = ''' + str(row.QuestionId)
+                inner join AnswerOption ao on ag.Id = ao.AnswerGroupId WHERE q.Id = ''' + str(row['QuestionId'])
         query2 += ''' AND sm.Id = ''' + str(survey)
 
         to_filter.clear()
-        rows2 = get_data(query2, to_filter)
+        rows2 = get_data_sl(query2, to_filter)
 
         option=[]
         for row2 in rows2:
             opt={}           
-            opt['id'] = row2.AnswerOptionId
-            opt['text'] = row2.AnswerText
+            opt['id'] = row2['AnswerOptionId']
+            opt['text'] = row2['AnswerText']
 
             # get answer option tallies per question/option
             query3 = 'SELECT COUNT(*) Tally FROM Result WHERE SurveyMasterId = ' + str(survey)
-            query3 += ' AND QuestionId = ' + str(row.QuestionId) 
-            query3 += ' AND AnswerOptionId = ' + str(row2.AnswerOptionId)
+            query3 += ' AND QuestionId = ' + str(row['QuestionId']) 
+            query3 += ' AND AnswerOptionId = ' + str(row2['AnswerOptionId'])
 
             # print(query3)
             to_filter.clear()
-            rows3 = get_data(query3, to_filter)
+            rows3 = get_data_sl(query3, to_filter)
 
             for row3 in rows3: 
                 if _total != 0:
-                    p = round((row3.Tally / _total) * 100,1)
+                    p = round((row3['Tally'] / _total) * 100,1)
                     # print('Perc ', str(p)) 
                     opt['percentage'] = p
                 else:
                     opt['percentage'] = 0
 
-                opt['tally'] = row3.Tally
+                opt['tally'] = row3['Tally']
                 
                 # determine if current user choose this (current AnswerOptionId) answer
                 query_choice = '''SELECT COUNT(*) UserChoice FROM Result WHERE SurveyMasterId = ''' + str(survey)
-                query_choice += ''' AND QuestionId = ''' + str(row.QuestionId) 
-                query_choice += ''' AND AnswerOptionId = ''' + str(row2.AnswerOptionId)
+                query_choice += ''' AND QuestionId = ''' + str(row['QuestionId']) 
+                query_choice += ''' AND AnswerOptionId = ''' + str(row2['AnswerOptionId'])
                 query_choice += ''' AND SessionId = ''' + str(session) 
                 
                 to_filter.clear()
-                row_choice = get_data(query_choice, to_filter)
+                row_choice = get_data_sl(query_choice, to_filter)
                 for choice in row_choice:
-                    opt['choice'] = choice.UserChoice
+                    opt['choice'] = choice['UserChoice']
 
                 option.append(opt)
            

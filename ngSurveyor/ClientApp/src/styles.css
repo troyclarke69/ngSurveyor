@@ -2,6 +2,8 @@
 
 * {
   font-family: "Gotu", sans-serif;
+  /*background-color: white;*/
+  /*color: black;*/
 }
 
 #page-label {
@@ -9,7 +11,7 @@
 }
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+  /*color: #0366d6;*/
 }
 
 code {

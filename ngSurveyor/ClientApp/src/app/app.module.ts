@@ -33,12 +33,12 @@ import { GoogleChartModule } from './google-chart/google-chart.module'
       GoogleChartModule,
 
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
+        { path: '', component: HomeComponent, pathMatch: 'full' },
+        { path: 'counter', component: CounterComponent },
+        { path: 'fetch-data', component: FetchDataComponent },
         { path: 'summary-header', component: SummaryHeaderComponent },
         { path: 'summary-detail/:survey/:session', component: SummaryDetailComponent },
-        { path: 'survey-form/:session/:qgroup', component: SurveyFormComponent },
+        { path: 'survey-form/:session/:survey/:qgroup', component: SurveyFormComponent },
         { path: 'survey-form/:survey', component: SurveyFormComponent },
     ])
 

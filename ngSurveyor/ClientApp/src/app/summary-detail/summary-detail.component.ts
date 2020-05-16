@@ -10,7 +10,7 @@ import { Location } from '@angular/common'
 })
 export class SummaryDetailComponent implements OnInit {
 
-    stats = [];
+    stats;
     public survey;
     public session;
 
@@ -29,7 +29,7 @@ export class SummaryDetailComponent implements OnInit {
             .subscribe((data: any[]) => {
                 this.stats = data;
 
-                console.log(this.stats);
+                //console.log(this.stats);
 
         })
     }

@@ -1,24 +1,27 @@
 <div class="section-container">
   <h4>
-    <span id="page-label" class="badge badge-primary">Survey Results</span> <em>&nbsp;&nbsp;{{stats.surveyname}}</em>
+    <em>{{stats.surveyname}}&nbsp;&nbsp;</em><span id="page-label" class="badge badge-primary">Results</span>
   </h4>
+  <!--<p><b><i>*Your answers</i></b></p>-->
 
-  <div>
+
+    <div>
     <ul *ngFor="let row of stats.data">
       <li *ngIf="row.text!=''">{{  row.text }} </li>
-      <li *ngIf="row.text==''">There are no Results available at the moment. </li>
+      <p>  >> Total results: {{ row.total }}</p>
+
+      <li *ngIf="row.text==''">There are no results available at the moment. </li>
 
       <ul *ngFor="let opt of row.options.option">
-
         <li *ngIf="opt.choice =='1'">
-          <b>{{ opt.text }}</b>
+          <b><i>* {{ opt.text }}</i></b>
 
-          <div class="progress">
-            <div class="progress-bar progress-bar-info" role="progressbar"
-                 aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width: opt.percentage + '%'}">
-              <em>{{ opt.tally }}</em>
-            </div>
+        <div class="progress">
+          <div class="progress-bar progress-bar-info" role="progressbar"
+               aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width: opt.percentage + '%'}">
+            <em><b>{{ opt.percentage }}%</b> ( {{ opt.tally }} )</em>
           </div>
+        </div>
         </li>
 
         <li *ngIf="opt.choice !='1'">
@@ -27,12 +30,12 @@
           <div class="progress">
             <div class="progress-bar progress-bar-info" role="progressbar"
                  aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width: opt.percentage + '%'}">
-              <em>{{ opt.tally }}</em>
+              <em><b>{{ opt.percentage }}%</b> ( {{ opt.tally }} )</em>
             </div>
           </div>
         </li>
 
-      </ul>
+    </ul>
 
     </ul>
 
