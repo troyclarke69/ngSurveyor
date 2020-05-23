@@ -7,13 +7,13 @@ import { HttpClient } from '@angular/common/http';
 
 export class ApiService {
 
-    //private SURVEY_GET_URL = "http://127.0.0.1:5000/pysurveyor/survey/entry?";
-    //private RESULT_POST_URL = "http://127.0.0.1:5000/pysurveyor/result/post?";
-    //private SESSION_POST_URL = "http://127.0.0.1:5000/pysurveyor/session/post?";
+    private SURVEY_GET_URL = "http://127.0.0.1:5000/pysurveyor/survey/entry?";
+    private RESULT_POST_URL = "http://127.0.0.1:5000/pysurveyor/result/post?";
+    private SESSION_POST_URL = "http://127.0.0.1:5000/pysurveyor/session/post?";
 
-    private SURVEY_GET_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/survey/entry?";
-    private RESULT_POST_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/result/post?";
-    private SESSION_POST_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/session/post?";
+    //private SURVEY_GET_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/survey/entry?";
+    //private RESULT_POST_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/result/post?";
+    //private SESSION_POST_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/session/post?";
 
     private param: string;
 

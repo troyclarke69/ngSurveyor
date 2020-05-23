@@ -4,17 +4,16 @@
   <form #surveyForm="ngForm" (ngSubmit)="onSubmit(surveyForm.value)">
 
     <!--<div>{{ surveyForm.value | json}}</div>-->
-
     <!--<img src="/images/survey1.png" width="20%"/>-->
 
     <div>
-      <div>
+      <span class="badge badge-primary"><b>{{stats.surveyname}}</b></span>
+      <!--<div>
         <span class="badge badge-primary">Id: </span> <em> {{stats.surveyid}}  </em>
         <span class="badge badge-primary"> Survey Name: </span> <em> {{stats.surveyname}}  </em>
         <span class="badge badge-primary"> Session: </span> <em> {{stats.sessionid}}</em>
-      </div>
-      <p>
-      </p>
+      </div>-->
+      <p></p>
 
       <table class="table table-striped">
 

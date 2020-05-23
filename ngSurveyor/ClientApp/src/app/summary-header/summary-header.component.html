@@ -9,10 +9,10 @@
       <tr>
         <th>Name</th>
         <th>Purpose</th>
-        <th>Opened</th>
+        <!--<th>Opened</th>-->
         <!--<th>Closed</th>
         <th>Status</th>-->
-        <th colspan="2"></th>
+        <th colspan="4"></th>
 
       </tr>
     </thead>
@@ -23,19 +23,20 @@
           <!--<img src="{{ s.img }}" width="15%" height="15%">-->
           {{s.Name}}
           <!--<a routerLink="/summary-detail/{{ s.Id }} ngToolTip='View Stats'">
-            {{ s.Name }}
-          </a>-->
+      {{ s.Name }}
+    </a>-->
 
         </td>
         <td>{{ s.Purpose }}</td>
-        <td>{{ s.DateOpen | date:'MM/dd/yyyy'}}</td>
-
+        <!--<td>{{ s.DateOpen | date:'MM/dd/yyyy'}}</td>-->
         <!--<td *ngIf="s.Active!='Open'">{{ s.DateClose | date:'MM/dd/yyyy'}}</td>
-        <td *ngIf="s.Active=='Open'"></td>-->
+  <td *ngIf="s.Active=='Open'"></td>-->
         <!--<td>{{ s.Active }}</td>-->
 
-        <td><a routerLink="/survey-form/{{ s.Id }}">Take Survey</a></td>
-        <td><a routerLink="/summary-detail/{{ s.Id }}/0">View Stats</a></td>
+        <td><a routerLink="/survey-form/{{ s.Id }}">Take</a></td>
+        <td><a routerLink="/summary-detail/{{ s.Id }}/0">Stats</a></td>
+        <td><a routerLink="/survey-create/survey-question/{{ s.Id }}">Edit</a></td>
+        <td><a routerLink="/survey-create/survey-answer-template/{{ s.Id }}">Preview</a></td>
 
       </tr>
 

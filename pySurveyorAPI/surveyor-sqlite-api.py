@@ -13,6 +13,235 @@ app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 CORS(app)
 
+dbName = 'data.sqlite'
+
+# GETS survey list for cards (incl. # of respondents)
+@app.route("/pysurveyor/survey/list", methods=["GET"])
+def survey_list():
+    
+    query = ''' SELECT Id, [Name], Purpose, DateOpen, DateClose, [Count] 
+                FROM SurveyMaster a LEFT JOIN
+                    (SELECT SurveyMasterId, count(*) [Count] 
+                        FROM [Session]
+                        group by SurveyMasterId) as c on c.SurveyMasterId = a.Id
+                WHERE Active = 1 ORDER BY [Count] desc'''
+
+    to_filter = []
+    rows = get_data_sl(query, to_filter)
+
+    objects_list = []
+    
+    for row in rows:
+        d = {}
+        d['Id'] = row['Id']
+        d['Name'] = row['Name']
+        d['Purpose'] = row['Purpose']
+        d['DateOpen'] = str(row['DateOpen'])
+        d['DateClose'] = str(row['DateClose'])
+        d['Count'] = str(row['Count'])
+       
+        objects_list.append(d)
+
+    response = json.dumps(objects_list)
+    return response
+
+# GETS json schema  ...
+# http://127.0.0.1:5000/pysurveyor/survey/schema?survey=60
+@app.route("/pysurveyor/survey/schema", methods=["GET"])
+def survey_schema():
+
+    query_parameters = request.args
+    _survey = query_parameters.get('survey')
+    
+    # for now - storing each creation/revision BUT only returning top 1 (latest) schema ...
+    # future use - use as change/revision-tracker, templating, gen. troubleshooting...
+    query = ''' SELECT DataDef FROM SurveyMap WHERE SurveyMasterId = ''' + str(_survey)
+    query += ''' ORDER BY DateEntered desc 
+                LIMIT 1;  '''
+
+    to_filter = []
+    rows = get_data_sl(query, to_filter)
+    result = ''
+    for row in rows:
+        result = row[0]
+
+    return str(result)
+
+# http://127.0.0.1:5000/pysurveyor/survey/options?group=85
+@app.route("/pysurveyor/survey/options", methods=["GET"])
+def survey_options():
+
+    query_parameters = request.args
+    _group = query_parameters.get('group')
+    
+    query = ''' SELECT Id, AnswerVal, AnswerText FROM AnswerOption
+                WHERE AnswerGroupId = ''' + str(_group)
+
+    to_filter = []
+    rows = get_data_sl(query, to_filter)
+
+    result = []
+    for row in rows:
+        option={}      
+        option['id'] = row['Id']
+        option['answerval'] = row['AnswerVal']
+        option['answertext'] = row['AnswerText']
+        result.append(option)
+
+    return jsonify(result)
+
+# http://127.0.0.1:5000/pysurveyor/survey/groups
+@app.route("/pysurveyor/survey/groups", methods=["GET"])
+def survey_groups():
+
+    # query_parameters = request.args
+    # _group = query_parameters.get('group')
+    
+    query = ''' SELECT Id, Name FROM AnswerGroup WHERE AutoFill = 1 ORDER BY Name; '''
+    to_filter = []
+    rows = get_data_sl(query, to_filter)
+
+    result = []
+    option={}
+    option['id'] = 0
+    option['name'] = '~~ Auto-fill answer options ~~'
+    result.append(option)
+
+    for row in rows:
+        option={}      
+        option['id'] = row['Id']
+        option['name'] = row['Name']
+        result.append(option)
+
+    return jsonify(result)
+
+
+# ex. http://127.0.0.1:5000/pysurveyor/survey/create?new={"name":"The Awesome Survey","description":"This is the description of the new Survey","questions": [{"name":"Where is now?","answers": [{"option":"It's here"},{"option":"It's there"},{"option":"It's nowhere"},{"option":"It's everywhere"}]},{"name":"Who is what?","answers": [{"option":"It's her"},{"option":"It's him"},{"option":"It's no one"},{"option": "It's everyone"}]}]}&guid=n0e0w0s1u2r3v4e5y6
+@app.route("/pysurveyor/survey/create", methods=["GET", "POST"])
+def survey_create():
+    # discovered in testing: query_parameters.get() cannot handle '#' ... and likely other special chars
+    # not sure how to handle? have to eliminate chars before api call?
+
+    query_parameters = request.args
+    _result = query_parameters.get('new')
+    _guid = query_parameters.get('guid')
+    # load json str into js object
+    data = json.loads(_result)
+
+    # Insert into SurveyMaster, return SurveyMasterId ****************************
+    _name = data['name']
+    _purpose = data['description']
+    _today = datetime.datetime.now().date()
+    _origin = '' # future use
+    _active = 1
+
+    query = ''' INSERT INTO SurveyMaster (Name, Purpose, DateOpen, Active)
+                VALUES(?, ?, ?, ?)'''
+    _params = []
+    _params.append(_name)
+    _params.append(_purpose)
+    _params.append(_today)
+    _params.append(_active)
+    _surveyMasterId = post_data_sl(query, _params)
+
+    # Insert the session
+    query = '''INSERT INTO Session(Guid,DateEntered,Origin,SurveyMasterId) VALUES(?,?,?,?)'''
+    _params = []
+    _params.append(_guid)
+    _params.append(_today)
+    _params.append(_origin)
+    _params.append(_surveyMasterId)
+    _sessionId = post_data_sl(query, _params)
+
+    # Insert the 'map' record
+    query = ''' INSERT INTO SurveyMap (DateEntered, DataDef, SurveyMasterId)
+                VALUES(?, ?, ?)'''
+    _params = []
+    _params.append(_today)
+    _params.append(_result)
+    _params.append(_surveyMasterId)
+    _surveyMapId = post_data_sl(query, _params)
+
+    # load up arrays - easier to process going forward...
+    questions = []
+    answers = []
+    for row in data['questions']:
+        q = []
+        q.append(row['name'])
+        a = []
+        for r in row['answers']:         
+            a.append(r['option'])
+        answers.append(a)
+        questions.append(q)   
+
+    count = 0
+    for answer in answers:
+        loop_count = 1
+        loop_end = len(answer)
+        # concat string on 1st and last entry to obtain AnswerGroup.name
+        answerGroupName = ''
+        for a in answer:
+            if loop_count == 1:
+                answerGroupName = answerGroupName + a
+            if loop_count == loop_end:
+                answerGroupName = answerGroupName + ' - ' + a          
+            loop_count = loop_count + 1
+
+        # in this loop -- insert AnswerGroup, return answerGroupId
+        # print('insert AnswerGroup >> ', answerGroupName)
+        query = '''INSERT INTO AnswerGroup(Name) VALUES(?)'''
+        _params.clear()
+        _params.append(answerGroupName)
+        _answerGroupId = post_data_sl(query, _params)
+        # print('answerGroupId ', _answerGroupId)
+
+        # in this loop -- insert AnswerOption *answerGroupId
+        # print('insert AnswerOptions >>')
+        answerVal = 1
+        for text in answer:
+            # print('option ', text)
+            query = ''' INSERT INTO AnswerOption(AnswerVal, AnswerText, AnswerGroupId)
+                        VALUES(?,?,?) '''
+            _params.clear()
+            _params.append(answerVal)
+            _params.append(text)
+            _params.append(_answerGroupId)
+            _answerOptionId = post_data_sl(query, _params)
+            # print('answerOptionId ', _answerOptionId)
+            answerVal = answerVal + 1
+
+        # in this loop -- insert Question, return questionId *answerGroupId
+        # print('insert Question >> ', questions[count][0])
+
+        qOrder = count + 1
+        query = ''' INSERT INTO Question(QGroup, [Order], QuestionText, AnswerGroupId)
+                    VALUES(?,?,?,?) '''
+        _params.clear()
+        _params.append(1)   # QGroup default: 1 * future use
+        _params.append(qOrder)
+        _params.append(questions[count][0])
+        _params.append(_answerGroupId)
+        _questionId = post_data_sl(query, _params)
+        # print('questionId ', _questionId)
+
+        # in this loop -- insert SurveyQuestion *questionId
+        # print('insert SurveyQuestion >> ', questions[count][0], _surveyMasterId)
+        query = ''' INSERT INTO SurveyQuestion(SurveyMasterId, QuestionId)
+                    VALUES(?,?) '''
+        _params.clear()
+        _params.append(_surveyMasterId)
+        _params.append(_questionId)
+        _surveyQuestionId = post_data_sl(query, _params)
+
+        count = count + 1
+
+    # nice to know
+    # for question, answer in zip(questions, answers):
+    #     print("{}:{}".format(question, ", ".join(answer)))
+
+    return str(_surveyMasterId)
+
+
 
 # ex. http://127.0.0.1:5000/pysurveyor/result/post?result={ "1": "5", "2": "2", "3": "3", "4": "4", "5": "5", "6": "1", "7": "2", "8": "3", "9": "4", "10": "5", "11": "1", "12": "2", "13": "3", "14": "4", "15": "5", "16": "1", "17": "2", "18": "3", "19": "4", "20": "5", "21": "1", "22": "2", "23": "3", "24": "2", "25": "1" }&session=1&survey=1
 @app.route("/pysurveyor/result/post", methods=["GET", "POST"])
@@ -32,10 +261,8 @@ def result_post():
     row = row.replace('}', '')
     row = row.split(',')
 
-    conn = sqlite3.connect('data.sqlite')
     query = '''INSERT INTO Result ([SessionId],[SurveyMasterId],[QuestionId],[AnswerOptionId]) 
                 VALUES(?,?,?,?)'''
-    cursor = conn.cursor()
     
     records=0
     for x in row:
@@ -49,14 +276,12 @@ def result_post():
         _params.append(question)
         _params.append(answer)
 
-        cursor.execute(query, _params)
+        _id = post_data_sl(query, _params)
         records = records + 1
 
-    # bulk insert
-    conn.commit()
-    conn.close()
     return str(records)
 
+# GETS survey for respondent
 # ex. http://127.0.0.1:5000/pysurveyor/survey/entry?session=1&survey=1&qgroup=1
 @app.route("/pysurveyor/survey/entry", methods=["GET"])
 def survey_entry():
@@ -153,11 +378,22 @@ def dict_factory(cursor, row):
         d[col[0]] = row[idx]
     return d
 
+def post_data_sl(query, params):
+
+    conn = sqlite3.connect(dbName)
+    cur = conn.cursor()
+    cur.execute(query, params)
+    conn.commit()
+    newId = cur.lastrowid
+    conn.close()
+
+    return newId
+
 def get_data_sl(q,f):
 
     # print('get_data_sl -q', q)
     # print('get_data_sl -f', f)
-    conn = sqlite3.connect('data.sqlite')
+    conn = sqlite3.connect(dbName)
     # conn.row_factory = dict_factory
     conn.row_factory = sqlite3.Row
     cur = conn.cursor()
@@ -194,36 +430,28 @@ def session_post():
 
     query = '''INSERT INTO Session(Guid,DateEntered,Origin,SurveyMasterId) VALUES(?,?,?,?)'''
 
-    conn = sqlite3.connect('data.sqlite')
-    cur = conn.cursor()
-
     _params = []
     _params.append(guid)
     _params.append(dateEntered)
     _params.append(origin)
     _params.append(survey)
+    _id = post_data_sl(query, _params)
 
-    cur.execute(query, _params)
-    conn.commit()
-    conn.close()
+    # return id for new insert ... compare to _id
+    # query_id = 'SELECT Id FROM Session WHERE Guid = ?'
+    # _params.clear()
+    # _params.append(guid)
+    # row = get_data_sl(query_id, _params)
+    # # print(row)
+    # for r in row:
+    #     new_id = r['Id']
 
-    # return id for new insert
-    query_id = 'SELECT Id FROM Session WHERE Guid = ?'
-
-    _params.clear()
-    _params.append(guid)
-
-    row = get_data_sl(query_id, _params)
-    print(row)
-    for r in row:
-        new_id = r['Id']
-
-    if new_id is None:
+    if _id is None:
         return 'error'
     else:
-        return str(new_id)
+        return str(_id)
 
-
+# GETS results for specified survey
 # http://127.0.0.1:5000/pysurveyor/survey?survey=1&session=0
 @app.route("/pysurveyor/survey", methods=["GET"])
 def survey_detail():
@@ -253,11 +481,7 @@ def survey_detail():
 
     query = query[:-4]
     query += " ORDER BY q.[Order];"
-
-    # print(query)
     rows = get_data_sl(query, to_filter)
-
-    # print('q1 ', rows)
 
     jsondata = {}
     jsondata['surveyid'] = survey
@@ -278,8 +502,6 @@ def survey_detail():
                 WHERE r.AnswerOptionId != 0 AND r.SurveyMasterId = ''' + str(survey)
         query_total += ''' AND QuestionId = ''' + str(row['QuestionId'])
         query_total += ''' GROUP BY r.SurveyMasterId, QuestionId'''
-        
-        # print('query_total: ', query_total)
 
         to_filter.clear()
         row_total = get_data_sl(query_total, to_filter)

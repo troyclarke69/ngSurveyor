@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../services/summary-header-api';
+import { ApiService } from '../services/survey-list-api';
 
 @Component({
-    selector: 'app-summary-header',
-    templateUrl: './summary-header.component.html',
-    styleUrls: ['./summary-header.component.css']
+    selector: 'app-survey-list',
+    templateUrl: './survey-list.component.html',
+    styleUrls: ['./survey-list.component.css']
 })
-export class SummaryHeaderComponent implements OnInit {
+export class SurveyListComponent implements OnInit {
 
     stats = [];
 

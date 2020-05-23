@@ -1,27 +1,27 @@
 <div class="section-container">
-  <h4>
+  <!--<h4>
     <em>{{stats.surveyname}}&nbsp;&nbsp;</em><span id="page-label" class="badge badge-primary">Results</span>
-  </h4>
+  </h4>-->
   <!--<p><b><i>*Your answers</i></b></p>-->
-
-
-    <div>
+  <span class="badge badge-primary"><b>{{stats.surveyname}}</b></span>
+  <p></p>
+  <div>
     <ul *ngFor="let row of stats.data">
       <li *ngIf="row.text!=''">{{  row.text }} </li>
-      <p>  >> Total results: {{ row.total }}</p>
+      <!--<p>  >> Total results: {{ row.total }}</p>-->
 
-      <li *ngIf="row.text==''">There are no results available at the moment. </li>
+      <!--<li *ngIf="row.text==''">There are no results available at the moment. </li>-->
 
       <ul *ngFor="let opt of row.options.option">
         <li *ngIf="opt.choice =='1'">
           <b><i>* {{ opt.text }}</i></b>
 
-        <div class="progress">
-          <div class="progress-bar progress-bar-info" role="progressbar"
-               aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width: opt.percentage + '%'}">
-            <em><b>{{ opt.percentage }}%</b> ( {{ opt.tally }} )</em>
+          <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar"
+                 aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width: opt.percentage + '%'}">
+              <em><b>{{ opt.percentage }}%</b> ( {{ opt.tally }} )</em>
+            </div>
           </div>
-        </div>
         </li>
 
         <li *ngIf="opt.choice !='1'">
@@ -35,44 +35,11 @@
           </div>
         </li>
 
-    </ul>
+      </ul>
 
     </ul>
 
   </div>
-  <!--<table class="table table-inverse table-hover header-fixed">
-    <thead class="thead-dark">
-      <tr>
-        <th>Question</th>
-        <th>Choice</th>
-        <th>Votes</th>
-        <th>%</th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let s of stats.data">
-
-        <td>{{ s.QuestionText }}</td>
-      </tr>
-      <tr *ngFor="let x of s.options.option">
-        <td></td>
-        <td>{{ x.AnswerText }}</td>
-        <td>{{ x.Votes }}</td>
-        <td>{{ x.Perc }}</td>
-      </tr>
-
-    </tbody>
-  </table>-->
-
-  <!-- <app-pagination
-  (goPage)="goToPage($event)"
-  (goPrev)="goToPrevious()"
-  (goNext)="goToNext()"
-  [page]="page"
-  [perPage]="limit"
-  [count]="total">
-  </app-pagination> -->
-
+  
 </div>
 

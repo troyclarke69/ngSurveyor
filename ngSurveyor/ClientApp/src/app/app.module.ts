@@ -14,6 +14,11 @@ import { SummaryDetailComponent } from './summary-detail/summary-detail.componen
 import { SurveyFormComponent } from './survey-form/survey-form.component';
 
 import { GoogleChartModule } from './google-chart/google-chart.module'
+import { SurveyCreateModule } from './survey-create/survey-create.module'
+import { SurveyHeaderComponent } from './survey-create/survey-header/survey-header.component';
+import { SurveyQuestionComponent } from './survey-create/survey-question/survey-question.component';
+import { SurveyAnswerTemplateComponent } from './survey-create/survey-answer-template/survey-answer-template.component';
+import { SurveyListComponent } from './survey-list/survey-list.component';
 
 @NgModule({
   declarations: [
@@ -24,22 +29,28 @@ import { GoogleChartModule } from './google-chart/google-chart.module'
     FetchDataComponent,
     SummaryHeaderComponent,
     SummaryDetailComponent,
-    SurveyFormComponent
+    SurveyFormComponent,
+    SurveyListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
       GoogleChartModule,
+      SurveyCreateModule,
 
     RouterModule.forRoot([
         { path: '', component: HomeComponent, pathMatch: 'full' },
         { path: 'counter', component: CounterComponent },
         { path: 'fetch-data', component: FetchDataComponent },
         { path: 'summary-header', component: SummaryHeaderComponent },
+        { path: 'survey-list', component: SurveyListComponent },
         { path: 'summary-detail/:survey/:session', component: SummaryDetailComponent },
         { path: 'survey-form/:session/:survey/:qgroup', component: SurveyFormComponent },
         { path: 'survey-form/:survey', component: SurveyFormComponent },
+        { path: 'survey-create/survey-header', component: SurveyHeaderComponent },
+        { path: 'survey-create/survey-question/:survey', component: SurveyQuestionComponent },
+        { path: 'survey-create/survey-answer-template/:survey', component: SurveyAnswerTemplateComponent }
     ])
 
   ],

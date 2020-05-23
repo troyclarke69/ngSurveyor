@@ -55,6 +55,8 @@ SELECT * FROM AnswerGroup_temp
 DROP TABLE AnswerGroup;
 ALTER TABLE AnswerGroup_temp RENAME TO AnswerGroup;
 
+ALTER TABLE AnswerGroup ADD COLUMN AutoFill integer;
+
 -------------
 CREATE TABLE AnswerOption_temp
 (Id integer primary key autoincrement, 
@@ -114,3 +116,9 @@ SELECT * FROM SurveyQuestion_temp
 
 DROP TABLE SurveyQuestion;
 ALTER TABLE SurveyQuestion_temp RENAME TO SurveyQuestion;
+
+
+CREATE TABLE "SurveyMap"
+(Id integer primary key autoincrement, 
+DateEntered datetime, [DataDef] text,
+SurveyMasterId integer);

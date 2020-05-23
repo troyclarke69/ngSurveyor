@@ -1,17 +1,14 @@
-input {
-  -webkit-border-radius: 20px;
-  -moz-border-radius: 20px;
-  border-radius: 20px;
-}
-
-select {
-  padding-top: 5px;
+::placeholder {
+  font-style: italic;
+  color: darkgreen;
+  font-size: .75em;
 }
 
 input {
   -webkit-border-radius: 20px;
   -moz-border-radius: 20px;
   border-radius: 20px;
+
 }
 
 .border {
@@ -20,4 +17,10 @@ input {
 
 span {
   font-size: 1.4em;
+}
+
+div {
+  /*display: block;*/
+  margin: auto;
+  padding: 2px 2px 2px 2px;
 }

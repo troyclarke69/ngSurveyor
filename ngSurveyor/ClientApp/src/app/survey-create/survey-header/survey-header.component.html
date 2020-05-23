@@ -1,0 +1,95 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+
+      <div class="margin-10">
+
+        <span class="badge badge-primary"><b>New Survey</b></span>
+        <p><small>* Required fields</small></p>
+        <p></p>
+      </div>
+
+      <form [formGroup]="sur" (ngSubmit)="save(sur)">
+        <div class="form-group">
+          <label><b>* Name</b></label>
+          <input type="text" class="form-control" formControlName="name" placeholder="Enter Survey Name" autofocus="autofocus">
+          <small *ngIf="sur.controls.name.touched && !sur.controls.name.valid" class="text-danger">
+            Survey Name is required.
+          </small>
+        </div>
+        <div class="form-group">
+          <label><b>Description</b></label>
+          <input type="text" class="form-control" formControlName="description">
+        </div>
+
+        <!--questions-->
+        <div formArrayName="questions">
+          <div *ngFor="let question of sur.controls.questions.controls; let i=index" class="panel panel-default">
+
+            <div class="panel-heading ">
+              <span><b>* Question {{i + 1}}</b></span>
+              <a *ngIf="sur.controls.questions.controls.length > 1" (click)="removeQuestion(i)" style="cursor: default; float: right">X</a>
+            </div>
+
+            <div class="panel-body" [formGroupName]="i">
+              <div class="row">
+                <div class="form-group col-md-12" style="padding-top:10px">
+                  <!-- <label>name</label> -->
+                  <input type="text" class="form-control" placeholder="Enter Question" formControlName="name">
+                  <small *ngIf="question.controls.name.touched && !question.controls.name.valid" class="text-danger">
+                    Question is required.
+                  </small>
+                </div>
+              </div>
+
+              <!--answers-->
+              <div class="row">
+                <div formArrayName="answers"
+                     *ngFor="let answer of sur.controls.questions.controls[i].controls.answers.controls; let j=index" class="col-md-12">
+
+                  <div [formGroupName]="j">
+                    <div class="form-group" style="padding-left:50px">
+                      <label><em><b>* Option #{{j+1}}</b></em></label>
+                      <a *ngIf="question.controls.answers.controls.length > 1" (click)="removeAnswer(question, j)" style="cursor: default; float: right">X</a>
+                      <input type="text" class="form-control" placeholder="Enter Option" formControlName="option">
+                      <small *ngIf="answer.controls.option.touched && !answer.controls.option.valid" class="text-danger">
+                        Answer option is required.
+                      </small>
+                    </div>
+                  </div>
+
+                  <a class="btn btn-outline-info" *ngIf="j == question.controls.answers.controls.length-1" (click)="addAnswer(question)">+ Answer</a>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="margin-20">
+          <a class="btn btn-outline-info" (click)="addQuestion()" style="cursor: default; float: right">
+            + Question
+          </a>
+        </div>
+
+        <div class="margin-20" style="padding-top:50px;">
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="!sur.valid"
+                  title="Is this button disabled?!?! You have one or more invalid or incomplete inputs indicated above.">
+            Publish Survey
+          </button>
+        </div>
+        <div class="clearfix"></div>
+
+        <!-- <div class="col-md-4">
+          <pre>form value: <br>{{sur.value | json}}</pre>
+        </div> -->
+
+      </form>
+    </div>
+
+    <div class="col-md-4">
+      <pre><em>Preview:</em> <br>{{sur.value | json}}</pre>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<!--<option value="default">~~ select ~~</option>-->
+<form #surveyForm="ngForm" (ngSubmit)="onSubmit(surveyForm.value)">
+
+  <!--<div>{{ surveyForm.value | json}}</div>-->
+  <!--<img src="/images/survey1.png" width="20%"/>-->
+
+  <div>
+    <div>
+      <!--<span><b>{{stats.name}}</b></span>-->
+      <span class="badge badge-primary"><b>{{stats.name}}</b></span>
+    </div>
+    <p>
+    </p>
+
+    <table class="table table-striped">
+
+      <tr *ngFor="let row of stats['questions']">
+        <td>
+          <label>{{row.name}}</label>
+        </td>
+
+        <td>
+          <select name={{row.name}} ngModel ng-style="'width':'100px'">
+            <option *ngFor="let a of row['answers']" value={{a.option}}>
+              {{a.option}}
+            </option>
+          </select>
+        </td>
+      </tr>
+    </table>
+
+    <div class="form-field">
+      <button type="submit" class="btn btn-dark btn-block">Publish Survey</button>
+    </div>
+  </div>
+</form>

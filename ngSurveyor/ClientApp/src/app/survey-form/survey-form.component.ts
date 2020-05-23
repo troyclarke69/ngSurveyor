@@ -14,7 +14,7 @@ import { Guid } from "guid-typescript";
 
 export class SurveyFormComponent implements OnInit {
 
-    stats;
+    public stats = [];
     public sessionGuid;
     public session;     // obtained through api
     public qgroup = 1;  // default: 1 (one page survey), future use: iterate through multi-pages
@@ -59,7 +59,6 @@ export class SurveyFormComponent implements OnInit {
     onSubmit(f) {
         this.submitted = true;
 
-        // UPDATE: pass in survey OR obtain surveyId from session passed in ... in API
         this.apiService.postData(f, this.session, this.surveyId)
             .subscribe((data: any[]) => {
                 // returns the number of inserted rows

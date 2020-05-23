@@ -3,7 +3,7 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
   /*background-color: #878f99;*/
-  color: #fff;
+  color: #d4a6a1;
 }
 
 html {
@@ -22,6 +22,6 @@ html {
 }
 
 .container {
-  background-color: #878f99;
-  color: #fff;
+  /*background-color: #878f99;*/
+  color: #ddd;
 }

@@ -10,7 +10,7 @@ import { Location } from '@angular/common'
 })
 export class SummaryDetailComponent implements OnInit {
 
-    stats;
+    public stats = [];
     public survey;
     public session;
 

@@ -32,12 +32,22 @@
     <None Remove="ClientApp\src\app\services\summary-header-api.ts" />
     <None Remove="ClientApp\src\app\services\survey-form-api.cs" />
     <None Remove="ClientApp\src\app\services\survey-form-api.ts" />
+    <None Remove="ClientApp\src\app\services\survey-list-api.ts" />
+    <None Remove="ClientApp\src\app\survey-create\service\survey-create-api.ts" />
+    <None Remove="ClientApp\src\app\survey-create\service\survey-fetch-api.ts" />
+    <None Remove="ClientApp\src\app\survey-create\service\survey-option-api.ts" />
+    <None Remove="ClientApp\src\app\survey-create\survey-answer\form_sample.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="ClientApp\src\app\services\survey-form-api.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\summary-detail-api.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\summary-header-api.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\survey-list-api.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\survey-create\service\survey-create-api.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\survey-create\service\survey-fetch-api.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\survey-create\service\survey-option-api.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\survey-create\survey-answer\form_sample.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
