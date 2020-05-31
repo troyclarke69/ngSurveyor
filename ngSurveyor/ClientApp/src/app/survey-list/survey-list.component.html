@@ -1,28 +1,28 @@
 <div class="container">
-  <div>Here is the list of available surveys. Take a survey and view the results.</div>
+  <!--<div>Here is the list of available surveys. Take a survey and view the results.</div>-->
 
   <div *ngFor="let s of stats; let i = index">
 
-      <div class="card">
-        <img src="#" alt="" style="width:100%">
+    <div class="card">
+      <img src="#" alt="" style="width:100%">
 
-        <div class="card-container">
+      <div class="card-container">
 
-          <i class="fa fa-question-circle fa-1x" aria-hidden="true"></i>
-          <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
-          <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
-          <!--<p>{{i}}</p>-->
-          <p>{{ s.Count }} Respondents</p>
-          <h4><b>{{ s.Name }}</b></h4>
-          <h5>{{ s.Purpose }}</h5>
+        <i class="fa fa-question-circle fa-1x" aria-hidden="true"></i>
+        <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
+        <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
 
-          <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
-          <a routerLink="/survey-form/{{ s.Id }}">Take Survey</a>
+        <p>{{ s.Count }} Respondents</p>
+        <h4><b>{{ s.Name }}</b></h4>
+        <h5>{{ s.Purpose }}</h5>
 
-          <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
-          <a routerLink="/summary-detail/{{ s.Id }}/0">View Stats</a>
-        </div>
+        <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
+        <a routerLink="/survey-take/{{ s.Id }}">Take Survey</a>
+
+        <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+        <a routerLink="/summary-detail/{{ s.Id }}/0">View Stats</a>
       </div>
+    </div>
 
     </div>
 </div>

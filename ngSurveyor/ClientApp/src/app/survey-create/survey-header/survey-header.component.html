@@ -24,7 +24,7 @@
 
         <!--questions-->
         <div formArrayName="questions">
-          <div *ngFor="let question of sur.controls.questions.controls; let i=index" class="panel panel-default">
+          <div *ngFor="let question of sur['controls'].questions['controls']; let i=index" class="panel panel-default">
 
             <div class="panel-heading ">
               <span><b>* Question {{i + 1}}</b></span>
@@ -89,6 +89,7 @@
 
     <div class="col-md-4">
       <pre><em>Preview:</em> <br>{{sur.value | json}}</pre>
+      <!--<app-survey-answer></app-survey-answer>-->
     </div>
 
   </div>

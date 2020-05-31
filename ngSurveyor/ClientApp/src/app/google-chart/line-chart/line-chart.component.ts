@@ -40,7 +40,7 @@ export class LineChartComponent implements OnInit
   private drawChart()
   {
     let data = this.gLib.visualization.arrayToDataTable(this.res);
-    console.log('drawChart', data);
+    //console.log('drawChart', data);
     var options = {
       title:'Daily Cases | Deaths | Recovered',
       legend:{position:'top-right'},
@@ -54,7 +54,7 @@ export class LineChartComponent implements OnInit
   private drawMain()
   {
     let data = new this.gLib.visualization.arrayToDataTable(this.chartRows);  
-    console.log('drawMain', data);
+    //console.log('drawMain', data);
     var options = {
       title:'Daily Cases | Deaths | Recovered',
       //legend:{position:'bottom'},
@@ -122,7 +122,7 @@ export class LineChartComponent implements OnInit
         chartRow.push(s.date, s.confirmed, s.recovered, s.deaths);
         this.chartRows.push(chartRow);
       }    
-      console.log('chart', this.chartRows);
+      //console.log('chart', this.chartRows);
       this.drawMain(); 
     })       
   }

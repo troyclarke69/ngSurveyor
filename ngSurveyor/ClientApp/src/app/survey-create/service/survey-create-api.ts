@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ServiceModule } from './service.module';
+import { HttpClientHelper } from '../../services/base-url-helper';
 
 @Injectable({
     providedIn: ServiceModule
@@ -8,7 +9,8 @@ import { ServiceModule } from './service.module';
 
 export class ApiService {
 
-    private SURVEY_POST_URL = "http://127.0.0.1:5000/pysurveyor/survey/create?";
+    //private SURVEY_POST_URL = "http://127.0.0.1:5000/pysurveyor/survey/create?";
+    private path = 'survey/create?';
     private param: string;
 
     constructor(private httpClient: HttpClient) { }
@@ -21,6 +23,7 @@ export class ApiService {
         this.param = "new=" + data_json + "&guid=" + sessionGuid;
         //console.log(`${this.SURVEY_POST_URL}` + this.param);
 
-        return this.httpClient.get(`${this.SURVEY_POST_URL}` + this.param);
+        //return this.httpClient.get(`${this.SURVEY_POST_URL}` + this.param);
+        return this.httpClient.get(`${HttpClientHelper.baseURL}` + this.path + this.param);
     }
 }

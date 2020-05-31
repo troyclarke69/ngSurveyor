@@ -1,36 +1,57 @@
-<!--<option value="default">~~ select ~~</option>-->
 <form #surveyForm="ngForm" (ngSubmit)="onSubmit(surveyForm.value)">
-
-  <!--<div>{{ surveyForm.value | json}}</div>-->
-  <!--<img src="/images/survey1.png" width="20%"/>-->
+  <div>{{ surveyForm.value | json}}</div>
 
   <div>
     <div>
-      <!--<span><b>{{stats.name}}</b></span>-->
-      <span class="badge badge-primary"><b>{{stats.name}}</b></span>
+      <span class="badge badge-primary"><b>{{stats['name']}}</b></span>
     </div>
-    <p>
-    </p>
+    <p></p>
 
-    <table class="table table-striped">
+    <div *ngFor="let row of stats['questions']; let i = index">
+      <label><b>{{i + 1}}.&nbsp;&nbsp;&nbsp;&nbsp; {{row.name}}</b></label>
 
-      <tr *ngFor="let row of stats['questions']">
-        <td>
-          <label>{{row.name}}</label>
-        </td>
+      <div *ngIf="row.type == 'Dropdown'">
+        <select name={{row.name}} ngModel ng-style="'width':'100px'">
+          <option *ngFor="let a of row['answers']" value={{a.option}}>
+            {{a.option}}
+          </option>
+        </select>
+      </div>
 
-        <td>
-          <select name={{row.name}} ngModel ng-style="'width':'100px'">
-            <option *ngFor="let a of row['answers']" value={{a.option}}>
-              {{a.option}}
-            </option>
-          </select>
-        </td>
-      </tr>
-    </table>
+      <div *ngIf="row.type == 'Radio'">
+        <div *ngFor="let a of row['answers']">
+          <input type="radio" ngModel name={{row.name}} value="{{a.option}}" />
+          <label class="radio-label"for="{{a.option}}">{{a.option}}</label>
+        </div>
+      </div>
 
-    <div class="form-field">
-      <button type="submit" class="btn btn-dark btn-block">Publish Survey</button>
     </div>
-  </div>
+
+
+      <!--<table class="table table-striped">
+        <tr *ngFor="let row of stats['questions']">
+          <td>
+            <label>{{row.name}}</label>
+          </td>
+
+          <td *ngIf="row.type == 'Dropdown'">
+            <select name={{row.name}} ngModel ng-style="'width':'100px'">
+              <option *ngFor="let a of row['answers']" value={{a.option}}>
+                {{a.option}}
+              </option>
+            </select>
+          </td>
+
+          <td *ngIf="row.type == 'Radio'">
+            <input *ngFor="let a of row['answers']" type="radio" formControlName="{{row.name}}" value="{{a.option}}" />
+            <label for="{{row.name}}">{{a.option}}</label>
+          </td>
+
+        </tr>
+      </table>-->
+
+      <div class="form-field">
+        <button type="submit" class="btn btn-dark btn-block">Publish Survey</button>
+      </div>
+    </div>
 </form>

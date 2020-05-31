@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { HttpClientHelper } from './base-url-helper';
 
 @Injectable({
     providedIn: 'root'
@@ -7,9 +8,13 @@ import { HttpClient } from '@angular/common/http';
 
 export class ApiService {
 
-    private SURVEY_GET_URL = "http://127.0.0.1:5000/pysurveyor/survey/entry?";
-    private RESULT_POST_URL = "http://127.0.0.1:5000/pysurveyor/result/post?";
-    private SESSION_POST_URL = "http://127.0.0.1:5000/pysurveyor/session/post?";
+    //private SURVEY_GET_URL = "http://127.0.0.1:5000/pysurveyor/survey/entry?";
+    //private RESULT_POST_URL = "http://127.0.0.1:5000/pysurveyor/result/post?";
+    //private SESSION_POST_URL = "http://127.0.0.1:5000/pysurveyor/session/post?";
+
+    private survey_path = 'survey/entry?';
+    private result_path = 'result/post?';
+    private session_path = 'session/post?';
 
     //private SURVEY_GET_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/survey/entry?";
     //private RESULT_POST_URL = "https://troyclarke69.pythonanywhere.com/pysurveyor/result/post?";
@@ -24,8 +29,9 @@ export class ApiService {
         this.param = "session=" + sessionId + "&survey=" + surveyId + "&qgroup=" + qgroup;
         //console.log("ApiService: survey-form-api.fetchData(s,q)");
         //console.log(`${this.SURVEY_GET_URL}` + this.param);
-
-        return this.httpClient.get(`${this.SURVEY_GET_URL}` + this.param);
+        //console.log(`${HttpClientHelper.baseURL}` + this.survey_path + this.param);
+        //return this.httpClient.get(`${this.SURVEY_GET_URL}` + this.param);
+        return this.httpClient.get(`${HttpClientHelper.baseURL}` + this.survey_path + this.param);
     }
 
     public postData(result, sessionId, surveyId) {
@@ -36,7 +42,8 @@ export class ApiService {
         //console.log("ApiService: survey-form-api.postData(r,s)");
         //console.log(`${this.RESULT_POST_URL}` + this.param);
 
-        return this.httpClient.get(`${this.RESULT_POST_URL}` + this.param);
+        //return this.httpClient.get(`${this.RESULT_POST_URL}` + this.param);
+        return this.httpClient.get(`${HttpClientHelper.baseURL}` + this.result_path + this.param);
     }
 
     public postSession(guid, surveyId) {
@@ -44,6 +51,7 @@ export class ApiService {
         this.param = "guid=" + guid + "&survey=" + surveyId;
         //console.log(`${this.SESSION_POST_URL}` + this.param);
 
-        return this.httpClient.get(`${this.SESSION_POST_URL}` + this.param);
+        //return this.httpClient.get(`${this.SESSION_POST_URL}` + this.param);
+        return this.httpClient.get(`${HttpClientHelper.baseURL}` + this.session_path + this.param);
     }
 }

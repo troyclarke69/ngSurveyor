@@ -1,16 +1,10 @@
 <div class="section-container">
-  <!--<h4>
-    <em>{{stats.surveyname}}&nbsp;&nbsp;</em><span id="page-label" class="badge badge-primary">Results</span>
-  </h4>-->
-  <!--<p><b><i>*Your answers</i></b></p>-->
-  <span class="badge badge-primary"><b>{{stats.surveyname}}</b></span>
+ 
+  <span class="badge badge-primary"><b>{{stats['surveyname']}}</b></span>
   <p></p>
   <div>
-    <ul *ngFor="let row of stats.data">
-      <li *ngIf="row.text!=''">{{  row.text }} </li>
-      <!--<p>  >> Total results: {{ row.total }}</p>-->
-
-      <!--<li *ngIf="row.text==''">There are no results available at the moment. </li>-->
+    <ul *ngFor="let row of stats['data']; let i = index">
+      <li *ngIf="row.text!=''">{{ row.text }} </li>
 
       <ul *ngFor="let opt of row.options.option">
         <li *ngIf="opt.choice =='1'">

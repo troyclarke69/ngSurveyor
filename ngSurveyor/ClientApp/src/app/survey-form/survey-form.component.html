@@ -7,7 +7,7 @@
     <!--<img src="/images/survey1.png" width="20%"/>-->
 
     <div>
-      <span class="badge badge-primary"><b>{{stats.surveyname}}</b></span>
+      <span class="badge badge-primary"><b>{{stats['surveyname']}}</b></span>
       <!--<div>
         <span class="badge badge-primary">Id: </span> <em> {{stats.surveyid}}  </em>
         <span class="badge badge-primary"> Survey Name: </span> <em> {{stats.surveyname}}  </em>
@@ -17,7 +17,7 @@
 
       <table class="table table-striped">
 
-        <tr *ngFor="let row of stats.data">
+        <tr *ngFor="let row of stats['data']">
           <td>
             <label>{{row.text}}</label>
           </td>

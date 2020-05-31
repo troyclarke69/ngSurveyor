@@ -7,12 +7,12 @@ import { HttpClient } from '@angular/common/http';
 import { Guid } from "guid-typescript";
 
 @Component({
-  selector: 'app-survey-form',
-  templateUrl: './survey-form.component.html',
-  styleUrls: ['./survey-form.component.css']
+    selector: 'app-survey-take',
+    templateUrl: './survey-take.component.html',
+    styleUrls: ['./survey-take.component.css']
 })
 
-export class SurveyFormComponent implements OnInit {
+export class SurveyTakeComponent implements OnInit {
 
     public stats = [];
     public sessionGuid;
@@ -27,14 +27,12 @@ export class SurveyFormComponent implements OnInit {
     //private _jsonURL = 'assets/test.json';
 
     constructor(private apiService: ApiService, private route: ActivatedRoute, private router: Router,
-                  private location: Location, private http: HttpClient)
-              {   var object;   }
+        private location: Location, private http: HttpClient) { var object; }
 
     ngOnInit() {
 
         // qgroup will default to 1 ... will implement multi-paging later.
-        this.route.paramMap.subscribe(params =>
-        {
+        this.route.paramMap.subscribe(params => {
             this.surveyId = params.get("survey")
         })
 
@@ -51,9 +49,9 @@ export class SurveyFormComponent implements OnInit {
                     .subscribe((data: any[]) => {
                         this.stats = data,
                             (error) => console.log(error);
-                        console.log('data', data);
+                        //console.log('data', data);
                     })
-            })     
+            })
     }
 
     onSubmit(f) {
@@ -63,10 +61,10 @@ export class SurveyFormComponent implements OnInit {
             .subscribe((data: any[]) => {
                 // returns the number of inserted rows
                 this.stats = data,
-                (error) => console.log(error);
+                    (error) => console.log(error);
                 //console.log(data);
             })
 
-        this.router.navigateByUrl('/summary-detail/' + this.surveyId + '/' + this.session);       
+        this.router.navigateByUrl('/summary-detail/' + this.surveyId + '/' + this.session);
     }
 }

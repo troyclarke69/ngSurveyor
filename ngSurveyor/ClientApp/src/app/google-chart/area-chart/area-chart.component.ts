@@ -33,7 +33,7 @@ export class AreaChartComponent implements OnInit
   private drawMain()
   {
     let data = new this.gLib.visualization.arrayToDataTable(this.chartRows);  
-    console.log('drawMain', data);
+    //console.log('drawMain', data);
     var options = {
       title: '',
       hAxis: {title: 'Cases/Million'}, 
@@ -67,7 +67,7 @@ export class AreaChartComponent implements OnInit
           counter = counter + 1;
         }
       }    
-      console.log('chart', this.chartRows);
+      //console.log('chart', this.chartRows);
       this.drawMain(); 
     })       
   }

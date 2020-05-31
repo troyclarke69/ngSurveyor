@@ -18,7 +18,9 @@ import { SurveyCreateModule } from './survey-create/survey-create.module'
 import { SurveyHeaderComponent } from './survey-create/survey-header/survey-header.component';
 import { SurveyQuestionComponent } from './survey-create/survey-question/survey-question.component';
 import { SurveyAnswerTemplateComponent } from './survey-create/survey-answer-template/survey-answer-template.component';
+import { SurveyAnswerComponent } from './survey-create/survey-answer/survey-answer.component';
 import { SurveyListComponent } from './survey-list/survey-list.component';
+import { SurveyTakeComponent } from './survey-take/survey-take.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { SurveyListComponent } from './survey-list/survey-list.component';
     SummaryHeaderComponent,
     SummaryDetailComponent,
     SurveyFormComponent,
-    SurveyListComponent
+    SurveyListComponent,
+    SurveyTakeComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -48,10 +51,14 @@ import { SurveyListComponent } from './survey-list/survey-list.component';
         { path: 'summary-detail/:survey/:session', component: SummaryDetailComponent },
         { path: 'survey-form/:session/:survey/:qgroup', component: SurveyFormComponent },
         { path: 'survey-form/:survey', component: SurveyFormComponent },
+        { path: 'survey-take/:survey', component: SurveyTakeComponent },
         { path: 'survey-create/survey-header', component: SurveyHeaderComponent },
         { path: 'survey-create/survey-question/:survey', component: SurveyQuestionComponent },
-        { path: 'survey-create/survey-answer-template/:survey', component: SurveyAnswerTemplateComponent }
-    ])
+        { path: 'survey-create/survey-answer-template/:survey', component: SurveyAnswerTemplateComponent },
+
+        { path: 'survey-create/survey-answer', component: SurveyAnswerComponent },
+    ]),
+
 
   ],
   providers: [],

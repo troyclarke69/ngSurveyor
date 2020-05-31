@@ -16,6 +16,7 @@ CORS(app)
 dbName = 'data.sqlite'
 
 # GETS survey list for cards (incl. # of respondents)
+# http://127.0.0.1:5000/pysurveyor/survey/list
 @app.route("/pysurveyor/survey/list", methods=["GET"])
 def survey_list():
     
@@ -91,6 +92,7 @@ def survey_options():
     return jsonify(result)
 
 # http://127.0.0.1:5000/pysurveyor/survey/groups
+# Gets answer groups marked AutoFill=1
 @app.route("/pysurveyor/survey/groups", methods=["GET"])
 def survey_groups():
 
@@ -116,7 +118,7 @@ def survey_groups():
     return jsonify(result)
 
 
-# ex. http://127.0.0.1:5000/pysurveyor/survey/create?new={"name":"The Awesome Survey","description":"This is the description of the new Survey","questions": [{"name":"Where is now?","answers": [{"option":"It's here"},{"option":"It's there"},{"option":"It's nowhere"},{"option":"It's everywhere"}]},{"name":"Who is what?","answers": [{"option":"It's her"},{"option":"It's him"},{"option":"It's no one"},{"option": "It's everyone"}]}]}&guid=n0e0w0s1u2r3v4e5y6
+# ex. http://127.0.0.1:5000/pysurveyor/survey/create?new={"name":"The Awesome Survey","description":"This is the description of the new Survey","questions": [{"name":"Where is now?","type":"Dropdown","answers": [{"option":"It's here"},{"option":"It's there"},{"option":"It's nowhere"},{"option":"It's everywhere"}]},{"name":"Who is what?","type":"Dropdown","answers": [{"option":"It's her"},{"option":"It's him"},{"option":"It's no one"},{"option": "It's everyone"}]}]}&guid=n0e0w0s1u2r3v4e5y6
 @app.route("/pysurveyor/survey/create", methods=["GET", "POST"])
 def survey_create():
     # discovered in testing: query_parameters.get() cannot handle '#' ... and likely other special chars
@@ -168,6 +170,7 @@ def survey_create():
     for row in data['questions']:
         q = []
         q.append(row['name'])
+        q.append(row['type'])
         a = []
         for r in row['answers']:         
             a.append(r['option'])
@@ -226,11 +229,12 @@ def survey_create():
 
         # in this loop -- insert SurveyQuestion *questionId
         # print('insert SurveyQuestion >> ', questions[count][0], _surveyMasterId)
-        query = ''' INSERT INTO SurveyQuestion(SurveyMasterId, QuestionId)
-                    VALUES(?,?) '''
+        query = ''' INSERT INTO SurveyQuestion(SurveyMasterId, QuestionId, DisplayType)
+                    VALUES(?,?,?) '''
         _params.clear()
         _params.append(_surveyMasterId)
         _params.append(_questionId)
+        _params.append(questions[count][1])
         _surveyQuestionId = post_data_sl(query, _params)
 
         count = count + 1
@@ -292,7 +296,11 @@ def survey_entry():
     survey = query_parameters.get('survey')
     qgroup = query_parameters.get('qgroup')
 
-    query = "SELECT s.Id SessionId, sm.Id SurveyId, sm.Name, q.Id QuestionId, q.QuestionText, q.[Order] FROM Session s inner join SurveyMaster sm on s.SurveyMasterId = sm.Id inner join SurveyQuestion sq on sm.Id = sq.SurveyMasterId inner join Question q on q.Id = sq.QuestionId WHERE"   
+    query = ''' 
+                SELECT s.Id SessionId, sm.Id SurveyId, sm.Name, q.Id QuestionId, q.QuestionText, q.[Order], sq.DisplayType 
+                FROM Session s inner join SurveyMaster sm on s.SurveyMasterId = sm.Id 
+                inner join SurveyQuestion sq on sm.Id = sq.SurveyMasterId 
+                inner join Question q on q.Id = sq.QuestionId WHERE '''  
 
     to_filter = []
     if session:
@@ -322,10 +330,14 @@ def survey_entry():
         question={}      
         question['id'] = row['QuestionId']
         question['text'] = row['QuestionText']
+        question['type'] = row['DisplayType']
         questions.append(question)
 
         # get all answer options per each questionId (above) - based on the Question.AnswerGroupId
-        query2 = "SELECT q.Id QuestionId, q.QuestionText, ao.Id AnswerOptionId, ao.AnswerText FROM Question q inner join AnswerOption ao on q.AnswerGroupId = ao.AnswerGroupId WHERE q.Id = " + str(row['QuestionId'])
+        query2 = '''
+                    SELECT q.Id QuestionId, q.QuestionText, ao.Id AnswerOptionId, ao.AnswerText 
+                    FROM Question q inner join AnswerOption ao on q.AnswerGroupId = ao.AnswerGroupId 
+                    WHERE q.Id = ''' + str(row['QuestionId'])
 
         to_filter.clear()
         rows2 = get_data_sl(query2, to_filter)

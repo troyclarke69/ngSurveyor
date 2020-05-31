@@ -1,55 +1,32 @@
 <div class="section-container">
-  <h4>
-    Surveys
-  </h4>
+  <span class="badge badge-primary"><b>Surveys</b></span>
+  <p></p>
 
   <table class="table table-inverse
       table-hover header-fixed">
     <thead class="thead-light">
       <tr>
-        <th>Name</th>
-        <th>Purpose</th>
+        <!--<th>Name</th>
+        <th>Purpose</th>-->
         <!--<th>Opened</th>-->
         <!--<th>Closed</th>
         <th>Status</th>-->
-        <th colspan="4"></th>
+        <th colspan="6"></th>
 
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let s of stats">
 
-        <td>
-          <!--<img src="{{ s.img }}" width="15%" height="15%">-->
-          {{s.Name}}
-          <!--<a routerLink="/summary-detail/{{ s.Id }} ngToolTip='View Stats'">
-      {{ s.Name }}
-    </a>-->
+        <td><b>{{s.Name}}</b></td>
+        <td><i>{{ s.Purpose }}</i></td>
 
-        </td>
-        <td>{{ s.Purpose }}</td>
-        <!--<td>{{ s.DateOpen | date:'MM/dd/yyyy'}}</td>-->
-        <!--<td *ngIf="s.Active!='Open'">{{ s.DateClose | date:'MM/dd/yyyy'}}</td>
-  <td *ngIf="s.Active=='Open'"></td>-->
-        <!--<td>{{ s.Active }}</td>-->
-
-        <td><a routerLink="/survey-form/{{ s.Id }}">Take</a></td>
+        <td><a routerLink="/survey-take/{{ s.Id }}">Take</a></td>
         <td><a routerLink="/summary-detail/{{ s.Id }}/0">Stats</a></td>
-        <td><a routerLink="/survey-create/survey-question/{{ s.Id }}">Edit</a></td>
-        <td><a routerLink="/survey-create/survey-answer-template/{{ s.Id }}">Preview</a></td>
+        <td><a title="Create a new survey from a copy of this survey" routerLink="/survey-create/survey-question/{{ s.Id }}">New</a></td>
 
       </tr>
 
     </tbody>
   </table>
-
-  <!-- <app-pagination
-  (goPage)="goToPage($event)"
-  (goPrev)="goToPrevious()"
-  (goNext)="goToNext()"
-  [page]="page"
-  [perPage]="limit"
-  [count]="total">
-  </app-pagination> -->
-
 </div>

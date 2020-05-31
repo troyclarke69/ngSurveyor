@@ -27,7 +27,7 @@
 
         <!--questions-->
         <div formArrayName="questions">
-          <div *ngFor="let question of sur.controls.questions.controls; let i=index" class="panel panel-default">
+          <div *ngFor="let question of sur['controls'].questions['controls']; let i=index" class="panel panel-default">
 
             <div class="panel-heading ">
               <b>* Question {{i + 1}}</b>
@@ -45,17 +45,24 @@
                   <small *ngIf="question.controls.name.touched && !question.controls.name.valid" class="text-danger">
                     Question is required.
                   </small>
-                
+                  <p></p>
                   <select (change)="onSelect(question, $event.target.value)" style="cursor: default;
                       float: right; border-radius:10px;">
                     <option *ngFor="let group of groups" value={{group.id}}>
-                        {{group.name}}
+                      {{group.name}}
                     </option>
                   </select>
-                  
+
+                  <em>Display Option format:  </em>
+                  <select formControlName="type" style="cursor: default; border-radius:10px; padding: 0px 5px 0px 5px">
+                    <option>Dropdown</option>
+                    <option>Radio</option>
+                  </select>
+
+
                   <!--<a class="btn btn-outline-info" (click)="addOptions(question)" style="cursor: default; float: right">
-                    + Options
-                  </a>-->
+    + Options
+  </a>-->
 
                 </div>
               </div>
@@ -107,9 +114,9 @@
         </div>
         <div class="clearfix"></div>
 
-        <!-- <div class="col-md-4">
+         <!--<div class="col-md-4">
           <pre>form value: <br>{{sur.value | json}}</pre>
-        </div> -->
+        </div>--> 
 
       </form>
     </div>

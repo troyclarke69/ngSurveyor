@@ -1,0 +1,55 @@
+<form #surveyForm="ngForm" (ngSubmit)="onSubmit(surveyForm.value)">
+  <!--<div>{{ surveyForm.value | json}}</div>-->
+  <div>
+    <span class="badge badge-primary"><b>{{stats['surveyname']}}</b></span>
+    <p></p>
+
+    <div *ngFor="let row of stats['data']; let i = index">
+      <label><b>{{i + 1}}.&nbsp;&nbsp;&nbsp;&nbsp; {{row.text}}</b></label>
+
+      <div class="custom-div" *ngIf="row.type == 'Dropdown'">
+        <select name={{row.id}} ngModel ng-style="'width':'100px'">
+          <option *ngFor="let a of row.options.option" value={{a.id}}>
+            {{a.text}}
+          </option>
+        </select>
+      </div>
+
+      <div *ngIf="row.type == 'Radio'">
+        <div *ngFor="let a of row.options.option">
+          <input type="radio" ngModel name={{row.id}} value="{{a.id}}" />
+          <label class="radio-label" for="{{a.id}}">{{a.text}}</label>
+        </div>
+      </div>
+
+    </div>
+
+    <!--<table class="table table-striped">
+    <tr *ngFor="let row of stats['data']">
+      <td>
+        <label>{{row.text}}</label>
+      </td>
+
+      <td *ngIf="row.type == 'Dropdown'">
+        <select name={{row.id}} ngModel ng-style="'width':'100px'">
+          <option *ngFor="let a of row.options.option" value={{a.id}}>
+            {{a.text}}
+          </option>
+        </select>
+      </td>
+
+      <td *ngIf="row.type == 'Radio'">
+        <input *ngFor="let a of row.options.option" type="radio" ngModel name={{row.id}} value={{a.id}} />
+        <label class="radio-label" for="{{a.id}}">{{a.text}}</label>
+      </td>
+
+    </tr>
+  </table>-->
+
+    <div class="form-field">
+      <button type="submit" class="btn btn-success">Submit</button>
+      <!--[disabled]="!ngForm.form.valid-->
+    </div>
+  </div>
+</form>
+

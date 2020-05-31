@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import form_template from './form_sample';
+import survey_sample from './survey_sample';
 
 @Component({
     selector: 'app-survey-answer',

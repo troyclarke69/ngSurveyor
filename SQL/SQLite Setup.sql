@@ -117,8 +117,10 @@ SELECT * FROM SurveyQuestion_temp
 DROP TABLE SurveyQuestion;
 ALTER TABLE SurveyQuestion_temp RENAME TO SurveyQuestion;
 
+ALTER TABLE SurveyQuestion ADD COLUMN DisplayType text;
 
 CREATE TABLE "SurveyMap"
 (Id integer primary key autoincrement, 
 DateEntered datetime, [DataDef] text,
 SurveyMasterId integer);
+
