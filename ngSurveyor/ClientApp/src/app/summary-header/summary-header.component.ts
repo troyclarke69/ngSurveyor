@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/summary-header-api';
+import { AuthenticationService } from '../user/authentication.service';
 
 @Component({
     selector: 'app-summary-header',
@@ -9,16 +10,16 @@ import { ApiService } from '../services/summary-header-api';
 export class SummaryHeaderComponent implements OnInit {
 
     stats = [];
+    isloggedIn: boolean;
 
     constructor(private apiService: ApiService) { }
 
     ngOnInit() {
 
-        // Insert Session record
+        //this.isloggedIn = AuthenticationService.userLoggedIn();
         this.apiService.fetchData().subscribe((data: any[]) => {
             //console.log(data);
             this.stats = data;
-
         })
     }
 }

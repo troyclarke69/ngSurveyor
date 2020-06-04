@@ -40,6 +40,9 @@
     <None Remove="ClientApp\src\app\survey-create\survey-answer\form_sample.ts" />
     <None Remove="ClientApp\src\app\survey-create\survey-answer\survey_sample.ts" />
     <None Remove="ClientApp\src\app\survey-create\survey-answer\template_sample.ts" />
+    <None Remove="ClientApp\src\app\user\auth.guard.ts" />
+    <None Remove="ClientApp\src\app\user\authentication.service.ts" />
+    <None Remove="ClientApp\src\app\user\user.request.interceptor.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +57,9 @@
     <TypeScriptCompile Include="ClientApp\src\app\survey-create\survey-answer\form_sample.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\survey-create\survey-answer\survey_sample.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\survey-create\survey-answer\template_sample.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\user\auth.guard.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\user\authentication.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\user\user.request.interceptor.ts" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

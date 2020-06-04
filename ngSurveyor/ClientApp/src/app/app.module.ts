@@ -21,6 +21,12 @@ import { SurveyAnswerTemplateComponent } from './survey-create/survey-answer-tem
 import { SurveyAnswerComponent } from './survey-create/survey-answer/survey-answer.component';
 import { SurveyListComponent } from './survey-list/survey-list.component';
 import { SurveyTakeComponent } from './survey-take/survey-take.component';
+import { UserModule } from './user/user.module';
+import { SignInComponent } from './user/sign-in/sign-in.component';
+import { SignUpComponent } from './user/sign-up/sign-up.component';
+import { ProfileComponent } from './user/profile/profile.component';
+import { AuthGuard } from './user/auth.guard';
+import { UserRequestInterceptor } from './user/user.request.interceptor';
 
 @NgModule({
   declarations: [
@@ -36,11 +42,12 @@ import { SurveyTakeComponent } from './survey-take/survey-take.component';
     SurveyTakeComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
+      BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+      HttpClientModule,
+      FormsModule,
       GoogleChartModule,
       SurveyCreateModule,
+      UserModule,
 
     RouterModule.forRoot([
         { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -52,16 +59,25 @@ import { SurveyTakeComponent } from './survey-take/survey-take.component';
         { path: 'survey-form/:session/:survey/:qgroup', component: SurveyFormComponent },
         { path: 'survey-form/:survey', component: SurveyFormComponent },
         { path: 'survey-take/:survey', component: SurveyTakeComponent },
-        { path: 'survey-create/survey-header', component: SurveyHeaderComponent },
-        { path: 'survey-create/survey-question/:survey', component: SurveyQuestionComponent },
-        { path: 'survey-create/survey-answer-template/:survey', component: SurveyAnswerTemplateComponent },
 
+        { path: 'survey-create/survey-header', component: SurveyHeaderComponent },
+        { path: 'survey-create/survey-question/:survey', component: SurveyQuestionComponent, canActivate: [AuthGuard] },
+        { path: 'survey-create/survey-answer-template/:survey', component: SurveyAnswerTemplateComponent },
         { path: 'survey-create/survey-answer', component: SurveyAnswerComponent },
+
+        { path: 'user/sign-in', component: SignInComponent },
+        { path: 'user/sign-up', component: SignUpComponent },
+        { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard]},
     ]),
 
-
   ],
-  providers: [],
+    providers: [
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: UserRequestInterceptor,
+            multi: true
+        },
+        AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
