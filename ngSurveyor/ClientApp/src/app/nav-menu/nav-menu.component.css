@@ -3,7 +3,17 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
   /*background-color: #878f99;*/
-  color: #d4a6a1;
+  /*color: #d4a6a1;*/
+  color: #000;
+  /*font-size: .9rem;*/
+}
+
+.fa {
+  padding-right: 1px;
+}
+
+a.nav-link {
+  color: red;
 }
 
 html {

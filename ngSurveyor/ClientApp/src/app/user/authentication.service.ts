@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +12,7 @@ export class AuthenticationService {
     jsonHeader = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     isLoggedIn: boolean;
 
-    constructor(private http: HttpClient, private router: Router) {
+    constructor(private http: HttpClient, private router: Router, private activatedRoute: ActivatedRoute, private ngZone: NgZone) {
         this.isLoggedIn = false;
     }
 
@@ -26,6 +26,7 @@ export class AuthenticationService {
     }
 
     signUp(username: string, password: string) {
+        console.log('auth.signUp', username, password);
         return this.http.post(
             this.workspace + '/sample-sign-up',
             // body content - required args can be seen in the Busywork function
@@ -36,6 +37,19 @@ export class AuthenticationService {
 
     // sign in
     signIn(username: string, password: string) {
+
+        var navTo: string;
+        this.activatedRoute.queryParamMap
+          .subscribe(params => {
+              navTo = params.get('returnUrl');
+              // returnUrl is only set when attempting to navigate to secure area: /survey-create/survey-question/x
+              // default other requests (ie. navMenu) to summary-header
+              if (navTo == null) {
+                  navTo = "summary-header";
+              }
+          });
+
+        //console.log('sign-in ', username, password, navTo);
         return this.http.post(
             this.workspace + '/sample-sign-in',
             // body args
@@ -47,11 +61,17 @@ export class AuthenticationService {
 
                         this.isLoggedIn = true;
                         localStorage.setItem('user_access_token', result['data']['access_token']);
-                        this.router.navigate(['user/profile']);
-                        // console.log('localstorage ', this.getAccessToken());
-                    } else {
 
-                        this.router.navigate(['user/sign-in'], { queryParams: { msg: 'Login failed' } });
+                        //this.router.navigate(['user/profile']);
+                        this.ngZone.run(() => {
+                            this.router.navigate([navTo])
+                        });
+  
+                    } else {
+                        //eliminate ngZone warning: so angular can detect changes made by async callbacks of third-party libraries
+                        this.ngZone.run(() => {
+                            this.router.navigate(['user/sign-in'], { queryParams: { msg: 'Login failed' } })
+                        });
                     }
                 }
             )
@@ -74,17 +94,11 @@ export class AuthenticationService {
 
     // authenticate - checks if the users token is valid
     authenticate() {
-        // console.log('authenticate', this.http.post(
-        //   this.workspace + '/sample-authenticate',
-        //   {},
-        //   this.jsonHeader
-        // ));
 
         return this.http.post(
             this.workspace + '/sample-authenticate',
             {},
             this.jsonHeader
         );
-
     }
 }

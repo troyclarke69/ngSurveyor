@@ -4,6 +4,10 @@ input {
   border-radius: 20px;
 }
 
+.fa {
+  padding-right: 2px;
+}
+
 select {
   padding-top: 5px;
 }

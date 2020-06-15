@@ -2,32 +2,46 @@
   <span class="badge badge-primary"><b>Surveys</b></span>
   <p></p>
 
-  <table class="table table-inverse
-      table-hover header-fixed">
-    <thead class="thead-light">
-      <tr>
+  <table class="table table-hover">
+    <thead class="">
+      
         <!--<th>Name</th>
         <th>Purpose</th>-->
         <!--<th>Opened</th>-->
         <!--<th>Closed</th>
         <th>Status</th>-->
-        <th colspan="6"></th>
+        <!--<th colspan="6"></th>-->
 
-      </tr>
+      
     </thead>
     <tbody>
       <tr *ngFor="let s of stats">
 
-        <td><b>{{s.Name}}</b></td>
-        <td><i>{{ s.Purpose }}</i></td>
+        <td>
+          <h4><b>{{s.Name}}</b></h4><br />
+          <em>{{ s.Purpose }}</em>
+        </td>
 
-        <td><a routerLink="/survey-take/{{ s.Id }}">Take</a></td>
-        <td><a routerLink="/summary-detail/{{ s.Id }}/0">Stats</a></td>
-
-        <td><a title="Create a new survey from a copy of this survey" routerLink="/survey-create/survey-question/{{ s.Id }}">New</a></td>
+        <td>
+          <br /><br />
+          <a routerLink="/survey-take/{{ s.Id }}">
+            <i class="fa fa-pencil-square fa-1x" aria-hidden="true"></i>Take
+          </a>
+        </td>
+        <td>
+          <br /><br />
+          <a routerLink="/summary-detail/{{ s.Id }}/0">
+            <i class="fa fa-info-circle fa-1x" aria-hidden="true"></i>Stats
+          </a>
+        </td>
+        <td>
+          <br /><br />
+          <a title="Create a new survey from a copy of this survey" routerLink="/survey-create/survey-question/{{ s.Id }}">
+            <i class="fa fa-plus-square fa-1x" aria-hidden="true"></i>New
+          </a>
+        </td>
 
       </tr>
-
     </tbody>
   </table>
 </div>

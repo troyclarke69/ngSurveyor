@@ -28,6 +28,8 @@ import { ProfileComponent } from './user/profile/profile.component';
 import { AuthGuard } from './user/auth.guard';
 import { UserRequestInterceptor } from './user/user.request.interceptor';
 
+//import { ToastrModule } from "ngx-toastr";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -48,6 +50,7 @@ import { UserRequestInterceptor } from './user/user.request.interceptor';
       GoogleChartModule,
       SurveyCreateModule,
       UserModule,
+      //ToastrModule,
 
     RouterModule.forRoot([
         { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -67,7 +70,9 @@ import { UserRequestInterceptor } from './user/user.request.interceptor';
 
         { path: 'user/sign-in', component: SignInComponent },
         { path: 'user/sign-up', component: SignUpComponent },
-        { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard]},
+        { path: 'user/profile', component: ProfileComponent, canActivate: [AuthGuard] },
+
+
     ]),
 
   ],

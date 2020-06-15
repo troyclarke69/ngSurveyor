@@ -46,12 +46,14 @@
                     Question is required.
                   </small>
                   <p></p>
-                  <select (change)="onSelect(question, $event.target.value)" style="cursor: default;
+                  <div>
+                    <select (change)="onSelect(question, $event.target.value)" style="cursor: default;
                       float: right; border-radius:10px;">
-                    <option *ngFor="let group of groups" value={{group.id}}>
-                      {{group.name}}
-                    </option>
-                  </select>
+                      <option *ngFor="let group of groups" value={{group.id}}>
+                        {{group.name}}
+                      </option>
+                    </select>
+                  </div>
 
                   <em>Display Option format:  </em>
                   <select formControlName="type" style="cursor: default; border-radius:10px; padding: 0px 5px 0px 5px">

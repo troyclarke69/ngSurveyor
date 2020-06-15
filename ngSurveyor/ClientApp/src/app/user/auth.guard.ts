@@ -11,17 +11,18 @@ export class AuthGuard implements CanActivate {
 
     constructor(private authService: AuthenticationService, private router: Router) { }
 
-    canActivate(): boolean {
+    canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
         if (!this.authService.isLoggedIn) {
-            //console.log('AuthGuard ');
-            this.router.navigate(['user/sign-in'], { queryParams: { msg: 'You must login to access the page' } });
+            //this.router.navigate(['user/sign-in'], { queryParams: { msg: 'You must login to access the page' } });
+            this.router.navigate(['user/sign-in'], { queryParams: { returnUrl: state.url } });
             return false;
         };
         // console.log('canActive ', true);
         return true;
     }
 
+    // SAMPLE CODE: BUSYWORK (returns 'failed to complete')
     // canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     //   return this.authService.authenticate().pipe(
     //     map(active => {

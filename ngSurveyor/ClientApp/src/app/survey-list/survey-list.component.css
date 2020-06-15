@@ -1,10 +1,11 @@
 .card {
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 4px 8px 16px 4px rgba(0,0,0,0.5);
   transition: 0.5s;
-  width: 50%;
+  width: 100%;
   padding: 5px 5px 5px 5px;
   border-radius: 20px;
-  background-color: whitesmoke;
+  background-color: white;
+  /*background-color: whitesmoke;*/
 }
 
 p {
@@ -14,7 +15,7 @@ p {
 
 div {
   padding-bottom: 20px;
-  margin: auto;
+  /*margin: auto;*/
 }
 
 i {
@@ -22,7 +23,7 @@ i {
 }
 
 .card:hover {
-    box-shadow: 0 16px 32px 0 rgba(0,0,0,2);
+    box-shadow: 4px 6px 32px 4px rgba(10,10,10,5);
 }
 
 .card-container {

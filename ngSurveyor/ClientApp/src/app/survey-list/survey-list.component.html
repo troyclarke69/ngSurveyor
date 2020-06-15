@@ -1,28 +1,79 @@
 <div class="container">
-  <!--<div>Here is the list of available surveys. Take a survey and view the results.</div>-->
+  <div class="row">
 
-  <div *ngFor="let s of stats; let i = index">
-
-    <div class="card">
-      <img src="#" alt="" style="width:100%">
-
-      <div class="card-container">
-
-        <i class="fa fa-question-circle fa-1x" aria-hidden="true"></i>
-        <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
-        <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
-
-        <p>{{ s.Count }} Respondents</p>
-        <h4><b>{{ s.Name }}</b></h4>
-        <h5>{{ s.Purpose }}</h5>
-
-        <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
-        <a routerLink="/survey-take/{{ s.Id }}">Take Survey</a>
-
-        <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
-        <a routerLink="/summary-detail/{{ s.Id }}/0">View Stats</a>
+    <div class="col-6">
+      <div class="card">
+        <div class="card-container" title="{{ stats[0].Purpose }}">
+          <i class="fa fa-question-circle fa-1x" aria-hidden="true"></i>
+          <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
+          <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
+          <p>{{ stats[0].Count }} Respondents</p>
+          <h5><b>{{ stats[0].Name }}</b></h5>
+          <!--<h5 *ngIf="stats[0].Purpose.length < 50">{{ stats[0].Purpose }}</h5>-->
+          <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
+          <a routerLink="/survey-take/{{ stats[0].Id }}">Take Survey</a>
+          <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+          <a routerLink="/summary-detail/{{ stats[0].Id }}/0">View Stats</a>
+        </div>
       </div>
     </div>
 
+    <div class="col-6">
+      <div class="card">
+        <div class="card-container" title="{{ stats[1].Purpose }}">
+          <i class="fa fa-question-circle fa-1x" aria-hidden="true"></i>
+          <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
+          <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
+          <p>{{ stats[1].Count }} Respondents</p>
+          <h5><b>{{ stats[1].Name }}</b></h5>
+          <!--<h5 *ngIf="stats[1].Purpose.length < 48">{{ stats[1].Purpose }}</h5>-->
+          <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
+          <a routerLink="/survey-take/{{ stats[1].Id }}">Take Survey</a>
+          <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+          <a routerLink="/summary-detail/{{ stats[1].Id }}/0">View Stats</a>
+        </div>
+      </div>
     </div>
+
+  </div>
+
+  <div class="row">
+
+    <div class="col-6">
+      <div class="card">
+        <div class="card-container" title="{{ stats[2].Purpose }}">
+          <i class="fa fa-question-circle fa-1x" aria-hidden="true"></i>
+          <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
+          <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
+          <p>{{ stats[2].Count }} Respondents</p>
+          <h5><b>{{ stats[2].Name }}</b></h5>
+          <!--<h5>{{ stats[2].Purpose }}</h5>-->
+          <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
+          <a routerLink="/survey-take/{{ stats[2].Id }}">Take Survey</a>
+          <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+          <a routerLink="/summary-detail/{{ stats[2].Id }}/0">View Stats</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-6">
+      <div class="card">
+        <div class="card-container" title="{{ stats[3].Purpose }}">
+          <i class="fa fa-question-circle fa-1x" aria-hidden="true"></i>
+          <i class="fa fa-clipboard fa-2x" aria-hidden="true"></i>
+          <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
+          <p>{{ stats[3].Count }} Respondents</p>
+          <h5><b>{{ stats[3].Name }}</b></h5>
+          <!--<h5>{{ stats[3].Purpose }}</h5>-->
+          <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
+          <a routerLink="/survey-take/{{ stats[3].Id }}">Take Survey</a>
+          <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+          <a routerLink="/summary-detail/{{ stats[3].Id }}/0">View Stats</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
 </div>

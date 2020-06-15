@@ -1,20 +1,35 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <h1>Sign Up</h1>
-    </div>
-    <div class="col-12">
+
+    <div class="col-6">
+      <h6><b>Register</b></h6>
+      <p>You may register a new account using a username and password, or through a social media account</p>
+
       <form [formGroup]="form" (ngSubmit)="signUpUser()">
+        <!--<button type="submit" class="btn btn-success btn-block">Login</button>-->
         <div class="form-group">
-          <label>Username</label>
-          <input type="text" class="form-control" formControlName="username" placeholder="Enter a username" required>
+          <!--<label>Username</label>-->
+          <input type="text" value="test" class="form-control" formControlName="username" placeholder="username" required>
         </div>
         <div class="form-group">
-          <label>Password</label>
-          <input type="password" class="form-control" formControlName="password" placeholder="Enter a password" required>
+          <!--<label>Password</label>-->
+          <input type="password" value="test" class="form-control" formControlName="password" placeholder="password" required>
         </div>
-        <button type="submit" class="btn btn-success">Sign Up</button>
+        <button type="submit" class="btn btn-success btn-custom">Register</button>
       </form>
+
+      <div class="card text-center">
+        <div class="card-block">
+          <button class="btn btn-danger btn-social" #loginG>
+            <span class="fa fa-google fa-1x"> &nbsp;Register with Google</span>
+          </button>
+          <button class="btn btn-primary btn-social" style="float: none;" (click)="login()">
+            <span class="fa fa-facebook fa-1x"> &nbsp;Register with Facebook</span>
+          </button>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
+

@@ -2,7 +2,7 @@
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
   <!--<nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3">-->
   <div class="container">
-    <a class="navbar-brand" [routerLink]="['/']">Home</a>
+    <a class="navbar-brand" Title="Go Home" [routerLink]="['/']"><i class="fa fa-home" aria-hidden="true"></i></a>
     <button class="navbar-toggler"
             type="button"
             data-toggle="collapse"
@@ -20,14 +20,15 @@
             [routerLinkActiveOptions]="{ exact: true }">
 
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/summary-header']">Surveys</a>
+            <a class="nav-link" [routerLink]="['/summary-header']"><i class="fa fa-question-circle" aria-hidden="true"></i> Surveys</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/user/sign-in']">Sign in</a>
+            <a class="nav-link" Title="To create a new survey you must sign-in/up"
+               [routerLink]="['/user/sign-in']"><i class="fa fa-sign-in" aria-hidden="true"></i> Login/Register</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <!--<li class="nav-item" [routerLinkActive]="['link-active']">
             <a class="nav-link text-dark" [routerLink]="['/user/sign-up']">Sign Up</a>
-          </li>
+          </li>-->
 
       </ul>
     </div>
