@@ -1,4 +1,27 @@
-<div class="container">
+
+<ul class="products">
+  <li *ngFor="let s of stats">
+    <div className="product">
+      <div>
+        <h5><b>{{ s.Name }}</b></h5>
+      </div>
+      <div>
+        <small>{{ s.Purpose }}</small>
+      </div>
+      <div>
+        <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
+        <a routerLink="/survey-take/{{ s.Id }}">Take Survey</a>
+      </div>
+      <div>
+        <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
+        <a routerLink="/summary-detail/{{ s.Id }}/0">View Stats</a>
+      </div>
+    </div>
+  </li>
+</ul>
+
+
+<!--<div class="container">
   <div class="row">
 
     <div class="col-6">
@@ -9,7 +32,6 @@
           <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
           <p>{{ stats[0].Count }} Respondents</p>
           <h5><b>{{ stats[0].Name }}</b></h5>
-          <!--<h5 *ngIf="stats[0].Purpose.length < 50">{{ stats[0].Purpose }}</h5>-->
           <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
           <a routerLink="/survey-take/{{ stats[0].Id }}">Take Survey</a>
           <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
@@ -26,7 +48,6 @@
           <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
           <p>{{ stats[1].Count }} Respondents</p>
           <h5><b>{{ stats[1].Name }}</b></h5>
-          <!--<h5 *ngIf="stats[1].Purpose.length < 48">{{ stats[1].Purpose }}</h5>-->
           <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
           <a routerLink="/survey-take/{{ stats[1].Id }}">Take Survey</a>
           <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
@@ -47,7 +68,6 @@
           <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
           <p>{{ stats[2].Count }} Respondents</p>
           <h5><b>{{ stats[2].Name }}</b></h5>
-          <!--<h5>{{ stats[2].Purpose }}</h5>-->
           <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
           <a routerLink="/survey-take/{{ stats[2].Id }}">Take Survey</a>
           <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
@@ -64,7 +84,6 @@
           <i class="fa fa-check-square fa-1x" aria-hidden="true"></i>
           <p>{{ stats[3].Count }} Respondents</p>
           <h5><b>{{ stats[3].Name }}</b></h5>
-          <!--<h5>{{ stats[3].Purpose }}</h5>-->
           <i class="fa fa-pencil fa-1x" aria-hidden="true"></i>
           <a routerLink="/survey-take/{{ stats[3].Id }}">Take Survey</a>
           <i class="fa fa-eye fa-1x" aria-hidden="true"></i>
@@ -72,8 +91,5 @@
         </div>
       </div>
     </div>
-
   </div>
-
-
-</div>
+</div>-->
